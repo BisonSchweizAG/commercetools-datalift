@@ -77,11 +77,20 @@ class DataLiftTest {
     dataLift.execute(context);
 
     verify(runner).execute(eq(context), this.migrations.capture());
-    assertThat(this.migrations.getValue()).extracting(m -> m.version()).containsExactlyInAnyOrder(migrationsToExecute.toArray(new Integer[]{}));
+    assertThat(this.migrations.getValue())
+        .extracting(m -> m.version())
+        .containsExactly(migrationsToExecute.toArray(new Integer[]{}));
   }
 
   static Stream<MigrationsNoAction> testDataForAction() {
-    return Stream.of(new MigrationsNoAction(List.of(1, 2, 3, 4), 0, List.of(1, 2, 3, 4)), new MigrationsNoAction(List.of(1, 2, 3, 4), 1, List.of(2, 3, 4)), new MigrationsNoAction(List.of(1, 2, 3, 4), 2, List.of(3, 4)));
+    return Stream.of(
+        new MigrationsNoAction(List.of(1, 2, 3, 4), 0, List.of(1, 2, 3, 4)),
+        new MigrationsNoAction(List.of(1, 2, 3, 4), 1, List.of(2, 3, 4)),
+        new MigrationsNoAction(List.of(1, 2, 3, 4), 2, List.of(3, 4)),
+        new MigrationsNoAction(List.of(4, 3, 2, 1), 0, List.of(1, 2, 3, 4)),
+        new MigrationsNoAction(List.of(3, 2, 4, 1), 1, List.of(2, 3, 4)),
+        new MigrationsNoAction(List.of(1, 4, 3, 2), 2, List.of(3, 4))
+    );
   }
 
   private static DataMigration fakeMigration(int migrationVersion) {

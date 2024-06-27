@@ -1,5 +1,7 @@
 package tech.bison.datalift;
 
+import static java.util.Comparator.comparingInt;
+
 import java.util.List;
 
 public class DataLift {
@@ -16,7 +18,7 @@ public class DataLift {
 
   public void execute(Context context) {
     final List<DataMigration> foundMigrations = migrationLoader.load(context);
-    if(foundMigrations.isEmpty()) {
+    if (foundMigrations.isEmpty()) {
       return;
     }
     final VersionInfo version = versioner.currentVersion(context);
@@ -31,6 +33,7 @@ public class DataLift {
   private List<DataMigration> getMigrationsToExecute(List<DataMigration> foundMigrations, VersionInfo version) {
     return foundMigrations.stream()
         .filter(m -> m.version() > version.current())
+        .sorted(comparingInt(DataMigration::version))
         .toList();
   }
 }
