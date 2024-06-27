@@ -16,6 +16,9 @@ public class DataLift {
 
   public void execute(Context context) {
     final List<DataMigration> foundMigrations = scriptLoader.load(context);
+    if(foundMigrations.isEmpty()) {
+      return;
+    }
     final VersionInfo version = versioner.currentVersion(context);
     final List<DataMigration> migrationsToExecute = getMigrationsToExecute(foundMigrations, version);
     runner.execute(context, migrationsToExecute);

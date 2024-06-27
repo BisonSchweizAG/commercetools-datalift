@@ -5,6 +5,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
+
 @ExtendWith(MockitoExtension.class)
 class DataliftTest {
 
@@ -16,9 +21,14 @@ class DataliftTest {
   private Runner runner;
 
   @Test
-  void bla() {
+  void noMigrationsResultInNoAction() {
     Context context = null;
+    when(scriptLoader.load(context)).thenReturn(List.of());
     DataLift dataLift = new DataLift(versioner, scriptLoader, runner);
+
     dataLift.execute(context);
+
+    verifyNoInteractions(versioner);
+    verifyNoInteractions(runner);
   }
 }
