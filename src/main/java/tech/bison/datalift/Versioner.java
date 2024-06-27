@@ -1,8 +1,6 @@
 package tech.bison.datalift;
 
-public class Versioner {
+interface Versioner {
 
-  public VersionInfo currentVersion(Context context) {
-    return null;
-  }
+  VersionInfo currentVersion(Context context);
 }
