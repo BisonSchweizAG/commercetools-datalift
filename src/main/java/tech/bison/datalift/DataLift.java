@@ -20,8 +20,9 @@ public class DataLift {
       return;
     }
     final VersionInfo version = versioner.currentVersion(context);
+
     final List<DataMigration> migrationsToExecute = getMigrationsToExecute(foundMigrations, version);
-    if(migrationsToExecute.isEmpty()) {
+    if (migrationsToExecute.isEmpty()) {
       return;
     }
     runner.execute(context, migrationsToExecute);

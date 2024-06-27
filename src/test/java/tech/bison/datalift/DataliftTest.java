@@ -32,15 +32,24 @@ class DataliftTest {
   }
 
   @Test
-  void migrationsAlreadyExecutedResultInNoAction() {
+  void migration22Current23ResultInNoAction() {
     Context context = null;
-    DataMigration migration = new DataMigration() {
-      @Override
-      public int version() {
-        return 22;
-      }
-    };
-    when(migrationLoader.load(context)).thenReturn(List.of(migration));
+    DataMigration migration = fakeMigration(22);
+    when(scriptLoader.load(context)).thenReturn(List.of(migration));
+    final VersionInfo versionInfo = new VersionInfo(23);
+    when(versioner.currentVersion(context)).thenReturn(versionInfo);
+    DataLift dataLift = new DataLift(versioner, scriptLoader, runner);
+
+    dataLift.execute(context);
+
+    verifyNoInteractions(runner);
+  }
+
+  @Test
+  void migration23Current23ResultInNoAction() {
+    Context context = null;
+    DataMigration migration = fakeMigration(23);
+    when(scriptLoader.load(context)).thenReturn(List.of(migration));
     final VersionInfo versionInfo = new VersionInfo(23);
     when(versioner.currentVersion(context)).thenReturn(versionInfo);
     DataLift dataLift = new DataLift(versioner, migrationLoader, runner);
@@ -48,5 +57,9 @@ class DataliftTest {
     dataLift.execute(context);
 
     verifyNoInteractions(runner);
+  }
+
+  private static DataMigration fakeMigration(int migrationVersion) {
+    return () -> migrationVersion;
   }
 }
