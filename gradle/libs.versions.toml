@@ -5,8 +5,10 @@ assertj = '3.26.0'
 commercetools = '17.11.0'
 commercetools-okhttp-client4 = '17.12.0'
 jackson = '2.17.1'
+reflections = '0.10.2'
 
 [libraries]
+reflections = { module = "org.reflections:reflections", version.ref = "reflections" }
 commercetools-java-api = { module = "com.commercetools.sdk:commercetools-sdk-java-api", version.ref = "commercetools" }
 commercetools-okhttp-client4 = { module = "com.commercetools.sdk:commercetools-okhttp-client4", version.ref = "commercetools-okhttp-client4" }
 jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "jackson" }

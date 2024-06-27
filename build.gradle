@@ -5,6 +5,7 @@ plugins {
 dependencies {
   implementation libs.commercetools.java.api
   implementation libs.jackson.core
+  implementation libs.reflections
 
   testImplementation libs.junit.jupiter.api
   testImplementation libs.junit.jupiter.params

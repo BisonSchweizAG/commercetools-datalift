@@ -1,6 +1,6 @@
 package tech.bison.datalift;
 
-interface DataMigration {
+public interface DataMigration {
 
   int version();
 }
