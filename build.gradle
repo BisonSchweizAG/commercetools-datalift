@@ -1,11 +1,16 @@
 plugins {
-    alias(libs.plugins.spotless)
+  id 'java-library'
 }
 
-spotless {
-    java {
-        eclipse().configFile('gradle/datalift-style.xml')
-        importOrderFile('gradle/datalift.importorder')
-    }
+dependencies {
+  testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.2'
+  testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.2'
 }
 
+test {
+  useJUnitPlatform()
+}
+
+repositories {
+  mavenCentral()
+}

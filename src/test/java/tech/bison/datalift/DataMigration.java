@@ -1,5 +1,5 @@
 package tech.bison.datalift;
 
-public class DataMigration {
+interface DataMigration {
 
 }
