@@ -1,5 +1,4 @@
 package tech.bison.datalift;
 
-public class VersionInfo {
-
+record VersionInfo(int current) {
 }
