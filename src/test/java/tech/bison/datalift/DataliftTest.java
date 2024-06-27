@@ -74,6 +74,23 @@ class DataliftTest {
     verify(runner).execute(context, List.of(migration));
   }
 
+  @Test
+  void migration20To24Current23ResultInRun24() {
+    final Context context = null;
+    final DataMigration migration21 = fakeMigration(21);
+    final DataMigration migration22 = fakeMigration(22);
+    final DataMigration migration23 = fakeMigration(23);
+    final DataMigration migration24 = fakeMigration(24);
+    when(scriptLoader.load(context)).thenReturn(List.of(migration21, migration22, migration23, migration24));
+    final VersionInfo versionInfo = new VersionInfo(23);
+    when(versioner.currentVersion(context)).thenReturn(versionInfo);
+    DataLift dataLift = new DataLift(versioner, scriptLoader, runner);
+
+    dataLift.execute(context);
+
+    verify(runner).execute(context, List.of(migration24));
+  }
+
   private static DataMigration fakeMigration(int migrationVersion) {
     return () -> migrationVersion;
   }
