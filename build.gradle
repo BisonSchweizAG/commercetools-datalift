@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-  testImplementation libs.j
+  testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.2'
   testImplementation 'org.junit.jupiter:junit-jupiter-params:5.10.2'
   testImplementation 'org.mockito:mockito-junit-jupiter:5.12.0'
 

@@ -26,8 +26,8 @@ class DataLiftTest {
   @Test
   void noMigrationsResultInNoAction() {
     Context context = null;
-    when(MigrationLoader.load(context)).thenReturn(List.of());
-    DataLift dataLift = new DataLift(versioner, scriptLoader, runner);
+    when(migrationLoader.load(context)).thenReturn(List.of());
+    DataLift dataLift = new DataLift(versioner, migrationLoader, runner);
 
     dataLift.execute(context);
 
@@ -40,10 +40,10 @@ class DataLiftTest {
   @MethodSource("testDataForNoAction")
   void migrationsResultInNoAction(MigratonTestData data) {
     final Context context = null;
-    when(scriptLoader.load(context)).thenReturn(data.migrations());
+    when(migrationLoader.load(context)).thenReturn(data.migrations());
     final VersionInfo versionInfo = new VersionInfo(data.currentVersion());
     when(versioner.currentVersion(context)).thenReturn(versionInfo);
-    DataLift dataLift = new DataLift(versioner, scriptLoader, runner);
+    DataLift dataLift = new DataLift(versioner, migrationLoader, runner);
 
     dataLift.execute(context);
 
@@ -67,10 +67,10 @@ class DataLiftTest {
   void migration24Current23ResultInRun24() {
     final Context context = null;
     final DataMigration migration = fakeMigration(24);
-    when(scriptLoader.load(context)).thenReturn(List.of(migration));
+    when(migrationLoader.load(context)).thenReturn(List.of(migration));
     final VersionInfo versionInfo = new VersionInfo(23);
     when(versioner.currentVersion(context)).thenReturn(versionInfo);
-    DataLift dataLift = new DataLift(versioner, scriptLoader, runner);
+    DataLift dataLift = new DataLift(versioner, migrationLoader, runner);
 
     dataLift.execute(context);
 
@@ -84,10 +84,10 @@ class DataLiftTest {
     final DataMigration migration22 = fakeMigration(22);
     final DataMigration migration23 = fakeMigration(23);
     final DataMigration migration24 = fakeMigration(24);
-    when(scriptLoader.load(context)).thenReturn(List.of(migration21, migration22, migration23, migration24));
+    when(migrationLoader.load(context)).thenReturn(List.of(migration21, migration22, migration23, migration24));
     final VersionInfo versionInfo = new VersionInfo(23);
     when(versioner.currentVersion(context)).thenReturn(versionInfo);
-    DataLift dataLift = new DataLift(versioner, scriptLoader, runner);
+    DataLift dataLift = new DataLift(versioner, migrationLoader, runner);
 
     dataLift.execute(context);
 
