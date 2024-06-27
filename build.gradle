@@ -3,8 +3,8 @@ plugins {
 }
 
 dependencies {
-  implementation 'com.commercetools.sdk:commercetools-sdk-java-api:17.11.0'
-  implementation 'com.fasterxml.jackson.core:jackson-core:2.17.1'
+  implementation libs.commercetools.java.api
+  implementation libs.jackson.core
 
   testImplementation libs.junit.jupiter.api
   testImplementation libs.junit.jupiter.params
