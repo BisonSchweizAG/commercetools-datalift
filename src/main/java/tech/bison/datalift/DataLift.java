@@ -5,17 +5,17 @@ import java.util.List;
 public class DataLift {
 
   private final Versioner versioner;
-  private final ScriptLoader scriptLoader;
+  private final MigrationLoader migrationLoader;
   private final Runner runner;
 
-  public DataLift(Versioner versioner, ScriptLoader scriptLoader, Runner runner) {
+  public DataLift(Versioner versioner, MigrationLoader migrationLoader, Runner runner) {
     this.versioner = versioner;
-    this.scriptLoader = scriptLoader;
+    this.migrationLoader = migrationLoader;
     this.runner = runner;
   }
 
   public void execute(Context context) {
-    final List<DataMigration> foundMigrations = scriptLoader.load(context);
+    final List<DataMigration> foundMigrations = migrationLoader.load(context);
     if(foundMigrations.isEmpty()) {
       return;
     }

@@ -2,7 +2,7 @@ package tech.bison.datalift;
 
 import java.util.List;
 
-interface ScriptLoader {
+interface MigrationLoader {
 
   List<DataMigration> load(Context context);
 }
