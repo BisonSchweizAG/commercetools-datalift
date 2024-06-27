@@ -5,13 +5,16 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class DataliftTest {
+class DataLiftTest {
 
   @Mock
   private Versioner versioner;
@@ -32,12 +35,13 @@ class DataliftTest {
     verifyNoInteractions(runner);
   }
 
-  @Test
-  void migration22Current23ResultInNoAction() {
+
+  @ParameterizedTest
+  @MethodSource("testDataForNoAction")
+  void migrationsResultInNoAction(MigratonTestData data) {
     final Context context = null;
-    final DataMigration migration = fakeMigration(22);
-    when(scriptLoader.load(context)).thenReturn(List.of(migration));
-    final VersionInfo versionInfo = new VersionInfo(23);
+    when(scriptLoader.load(context)).thenReturn(data.migrations());
+    final VersionInfo versionInfo = new VersionInfo(data.currentVersion());
     when(versioner.currentVersion(context)).thenReturn(versionInfo);
     DataLift dataLift = new DataLift(versioner, scriptLoader, runner);
 
@@ -46,18 +50,17 @@ class DataliftTest {
     verifyNoInteractions(runner);
   }
 
-  @Test
-  void migration23Current23ResultInNoAction() {
-    final Context context = null;
-    final DataMigration migration = fakeMigration(23);
-    when(scriptLoader.load(context)).thenReturn(List.of(migration));
-    final VersionInfo versionInfo = new VersionInfo(23);
-    when(versioner.currentVersion(context)).thenReturn(versionInfo);
-    DataLift dataLift = new DataLift(versioner, migrationLoader, runner);
-
-    dataLift.execute(context);
-
-    verifyNoInteractions(runner);
+  static Stream<MigratonTestData> testDataForNoAction() {
+    return Stream.of(
+        new MigratonTestData(
+            List.of(fakeMigration(22)),
+            23
+        ),
+        new MigratonTestData(
+            List.of(fakeMigration(23)),
+            23
+        )
+    );
   }
 
   @Test
@@ -93,5 +96,9 @@ class DataliftTest {
 
   private static DataMigration fakeMigration(int migrationVersion) {
     return () -> migrationVersion;
+  }
+
+  private record MigratonTestData(List<DataMigration> migrations, int currentVersion) {
+
   }
 }
