@@ -59,7 +59,9 @@ class DataLiftTest {
   }
 
   static Stream<MigrationsToExecute> testDataForNoAction() {
-    return Stream.of(new MigrationsToExecute(List.of(22), 23), new MigrationsToExecute(List.of(23), 23));
+    return Stream.of(
+        new MigrationsToExecute(List.of(21, 22), 23),
+        new MigrationsToExecute(List.of(17, 23), 23));
   }
 
   @ParameterizedTest
