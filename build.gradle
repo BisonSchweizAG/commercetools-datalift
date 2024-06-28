@@ -6,6 +6,7 @@ dependencies {
   implementation libs.commercetools.java.api
   implementation libs.jackson.core
   implementation libs.reflections
+  implementation libs.picocli
 
   testImplementation libs.junit.jupiter.api
   testImplementation libs.junit.jupiter.params
