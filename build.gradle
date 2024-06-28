@@ -1,12 +1,9 @@
-plugins {
-  id 'java-library'
-}
+subprojects {
+  apply plugin: 'java-library'
+  java {
+    sourceCompatibility = '21'
+  }
 
-java {
-  sourceCompatibility = '21'
-}
-
-allprojects {
   repositories {
     if (project.hasProperty('REPO1_URL')) {
       maven {
