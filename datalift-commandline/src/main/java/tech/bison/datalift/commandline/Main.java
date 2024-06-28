@@ -46,7 +46,9 @@ public class Main implements Runnable {
   private String packageFilter;
 
   public static void main(String[] args) {
-    CommandLine.run(new Main(), args);
+    CommandLine cmd = new CommandLine(new Main());
+    int exitCode = cmd.execute(args);
+    System.exit(exitCode);
   }
 
   @Override
