@@ -21,6 +21,7 @@ package tech.bison.datalift.core;
 
 import static java.util.Comparator.comparingInt;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import org.slf4j.Logger;
@@ -51,7 +52,9 @@ public class DataLift {
   }
 
   public static DataLift createWithDefaults(String classpathFilter) {
-    final Versioner versioner = new CustomObjectBasedVersioner(new ObjectMapper());
+    var objectMapper = new ObjectMapper()
+        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    final Versioner versioner = new CustomObjectBasedVersioner(objectMapper);
     final MigrationLoader migrationLoader = new ClasspathMigrationLoader(classpathFilter);
     final Runner runner = new RunnerImpl(versioner);
     return new DataLift(versioner, migrationLoader, runner);
