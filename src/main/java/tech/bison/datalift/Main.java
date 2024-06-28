@@ -29,6 +29,7 @@ public class Main implements Runnable {
   public void run() {
     System.out.println("Now we would execute DataLift with [" + clientId + "][" + clientSecret + "][" + apiUrl + "][" + authUrl + "][" + projectKey + "]");
     var context = new ContextCreator().create(new CommercetoolsProperties(clientId, clientSecret, apiUrl, authUrl, projectKey));
+    DataLift.createWithDefaults().execute(context);
     System.out.println("DataLift end");
   }
 }

@@ -1,5 +1,7 @@
 package tech.bison.datalift;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import static java.util.Comparator.comparingInt;
 
 import java.util.List;
@@ -14,6 +16,13 @@ public class DataLift {
     this.versioner = versioner;
     this.migrationLoader = migrationLoader;
     this.runner = runner;
+  }
+
+  public static DataLift createWithDefaults() {
+    final Versioner versioner = new CustomObjectBasedVersioner(new ObjectMapper());
+    final MigrationLoader migrationLoader = new ClasspathMigrationLoader("");
+    final Runner runner = null;
+    return new DataLift(versioner, migrationLoader, runner);
   }
 
   public void execute(Context context) {
