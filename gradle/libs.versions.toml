@@ -6,7 +6,9 @@ commercetools = '17.11.0'
 commercetools-okhttp-client4 = '17.12.0'
 jackson = '2.17.1'
 reflections = '0.10.2'
+testcontainers = '1.19.8'
 picocli = '4.7.0'
+mockserver = '5.15.0'
 slf4j = '2.0.13'
 logback = '1.5.6'
 
@@ -20,6 +22,9 @@ junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", vers
 junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit.jupiter" }
 mockito-junit-jupiter = { module = "org.mockito:mockito-junit-jupiter", version.ref = "mockito" }
 assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj" }
+testcontainers-junit-jupiter = {module = "org.testcontainers:junit-jupiter", version.ref = "testcontainers" }
+testcontainers-mockserver = {module = "org.testcontainers:mockserver", version.ref = "testcontainers" }
+mockserver-client = {module = "org.mock-server:mockserver-client-java", version.ref = "mockserver" }
 picocli = { module = "info.picocli:picocli", version.ref = "picocli" }
 slf4j = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
