@@ -26,5 +26,4 @@ repositories {
   } else {
     mavenCentral()
   }
-
 }
