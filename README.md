@@ -11,6 +11,7 @@ Datalift is a tool that let you automate your data migrations of your commerceto
 Coming soon.
 
 ## Building
+
 There is a possibility to use alternative url to maven central:
 create gradle.properties and set for example:
 REPO1_URL=https://artifactory.example.com/repo1
@@ -21,4 +22,4 @@ Coming soon.
 
 ## License
 
-Licensed under MIT License
+Licensed under Apache 2.0 
