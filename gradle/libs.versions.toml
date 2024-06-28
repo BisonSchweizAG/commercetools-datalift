@@ -7,6 +7,8 @@ commercetools-okhttp-client4 = '17.12.0'
 jackson = '2.17.1'
 reflections = '0.10.2'
 picocli = '4.7.0'
+slf4j = '2.0.13'
+logback = '1.5.6'
 
 [libraries]
 reflections = { module = "org.reflections:reflections", version.ref = "reflections" }
@@ -19,3 +21,5 @@ junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", vers
 mockito-junit-jupiter = { module = "org.mockito:mockito-junit-jupiter", version.ref = "mockito" }
 assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj" }
 picocli = { module = "info.picocli:picocli", version.ref = "picocli" }
+slf4j = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
+logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }

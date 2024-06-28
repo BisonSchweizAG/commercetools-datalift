@@ -23,6 +23,8 @@ import static java.util.Comparator.comparingInt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tech.bison.datalift.core.loader.ClasspathMigrationLoader;
 import tech.bison.datalift.core.loader.MigrationLoader;
 import tech.bison.datalift.core.runner.Runner;
@@ -32,6 +34,8 @@ import tech.bison.datalift.core.versioner.VersionInfo;
 import tech.bison.datalift.core.versioner.Versioner;
 
 public class DataLift {
+
+  private static Logger LOG = LoggerFactory.getLogger(DataLift.class);
 
   private final Versioner versioner;
   private final MigrationLoader migrationLoader;
@@ -51,17 +55,23 @@ public class DataLift {
   }
 
   public void execute(Context context) {
-    final List<DataMigration> foundMigrations = migrationLoader.load(context);
-    if (foundMigrations.isEmpty()) {
-      return;
+    try {
+      final List<DataMigration> foundMigrations = migrationLoader.load(context);
+      if (foundMigrations.isEmpty()) {
+        LOG.info("No data migrations found.");
+        return;
+      }
+      final VersionInfo version = versioner.currentVersion(context);
+      LOG.info("Current version is {}.", version.current());
+      final List<DataMigration> migrationsToExecute = getMigrationsToExecute(foundMigrations, version);
+      if (migrationsToExecute.isEmpty()) {
+        LOG.info("Data migrations are on current version. Nothing to execute.");
+        return;
+      }
+      runner.execute(context, version, migrationsToExecute);
+    } catch (Exception ex) {
+      throw new DataLiftException("Error while executing data migrations.", ex);
     }
-    final VersionInfo version = versioner.currentVersion(context);
-
-    final List<DataMigration> migrationsToExecute = getMigrationsToExecute(foundMigrations, version);
-    if (migrationsToExecute.isEmpty()) {
-      return;
-    }
-    runner.execute(context, version, migrationsToExecute);
   }
 
   private List<DataMigration> getMigrationsToExecute(List<DataMigration> foundMigrations, VersionInfo version) {

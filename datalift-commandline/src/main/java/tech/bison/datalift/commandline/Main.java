@@ -19,18 +19,23 @@
  */
 package tech.bison.datalift.commandline;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import tech.bison.datalift.core.CommercetoolsProperties;
 import tech.bison.datalift.core.ContextCreator;
 import tech.bison.datalift.core.DataLift;
+import tech.bison.datalift.core.DataLiftException;
 
 @Command(
     name = "datalift",
     description = "executes datalift"
 )
 public class Main implements Runnable {
+
+  private static Logger LOG = LoggerFactory.getLogger(Main.class);
 
   @Option(names = {"--clientId"}, required = true)
   private String clientId;
@@ -45,6 +50,7 @@ public class Main implements Runnable {
   @Option(names = {"--packageFilter"}, required = true, description = "Package filter")
   private String packageFilter;
 
+
   public static void main(String[] args) {
     CommandLine cmd = new CommandLine(new Main());
     int exitCode = cmd.execute(args);
@@ -53,11 +59,15 @@ public class Main implements Runnable {
 
   @Override
   public void run() {
-    System.out.println("Now we would execute DataLift with [" + clientId + "][" + clientSecret + "][" + apiUrl + "][" + authUrl + "][" + projectKey + "]");
+    LOG.info("Now we would execute DataLift with [{}][{}}][{}}]", apiUrl, authUrl, projectKey);
     final var context = new ContextCreator().create(new CommercetoolsProperties(clientId, clientSecret, apiUrl, authUrl, projectKey));
     final String classpathFilter = getClasspathFilter();
-    DataLift.createWithDefaults(classpathFilter).execute(context);
-    System.out.println("DataLift end");
+    try {
+      DataLift.createWithDefaults(classpathFilter).execute(context);
+    } catch (DataLiftException ex) {
+      LOG.error("An error occurred while executing data migrations.", ex);
+    }
+    LOG.info("DataLift end");
   }
 
   private String getClasspathFilter() {

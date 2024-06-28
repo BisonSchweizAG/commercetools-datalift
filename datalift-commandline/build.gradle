@@ -1,6 +1,7 @@
 dependencies {
   implementation project(':datalift-core')
   implementation libs.picocli
+  implementation libs.slf4j
 
   testImplementation libs.junit.jupiter.api
   testImplementation libs.junit.jupiter.params
@@ -8,6 +9,7 @@ dependencies {
 
   testRuntimeOnly libs.junit.jupiter.engine
   runtimeOnly libs.commercetools.okhttp.client4
+  runtimeOnly libs.logback
 }
 
 test {

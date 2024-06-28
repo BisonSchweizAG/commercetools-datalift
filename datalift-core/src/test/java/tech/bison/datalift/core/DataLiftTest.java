@@ -20,6 +20,8 @@
 package tech.bison.datalift.core;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -53,6 +55,18 @@ class DataLiftTest {
 
   @Captor
   private ArgumentCaptor<List<DataMigration>> migrations;
+
+  @Test
+  void exceptionOnLoadThenThrowDataLiftException() {
+    Context context = null;
+    var innerException = new IllegalStateException();
+    when(migrationLoader.load(context)).thenThrow(innerException);
+    DataLift dataLift = new DataLift(versioner, migrationLoader, runner);
+
+    var exception = assertThrows(DataLiftException.class, () -> dataLift.execute(context));
+    assertEquals("Error while executing data migrations.", exception.getMessage());
+    assertEquals(innerException, exception.getCause());
+  }
 
   @Test
   void noMigrationsResultInNoAction() {
