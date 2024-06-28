@@ -1,0 +1,20 @@
+{
+  "id": "3b00f7cb-93cd-47a3-8c18-51e24a0e6f5f",
+  "version": 1,
+  "versionModifiedAt": "2024-06-28T10:54:52.644Z",
+  "createdAt": "2024-06-28T10:54:52.644Z",
+  "lastModifiedAt": "2024-06-28T10:54:52.644Z",
+  "lastModifiedBy": {
+    "clientId": "IvzeuwyFLy3RP1XxmkmHLr9V",
+    "isPlatformClient": false
+  },
+  "createdBy": {
+    "clientId": "IvzeuwyFLy3RP1XxmkmHLr9V",
+    "isPlatformClient": false
+  },
+  "container": "version",
+  "key": "versionKey",
+  "value": {
+    "current": "1"
+  }
+}

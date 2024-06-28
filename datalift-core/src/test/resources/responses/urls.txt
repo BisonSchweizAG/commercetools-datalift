@@ -1,0 +1,2 @@
+GET: {{host}}/{{project-key}}/custom-objects/version/versionKey
+POST: {{host}}/{{project-key}}/custom-objects/version
