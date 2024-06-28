@@ -1,7 +1,3 @@
-plugins {
-  id 'java-library'
-}
-
 dependencies {
   implementation libs.commercetools.java.api
   implementation libs.jackson.core
