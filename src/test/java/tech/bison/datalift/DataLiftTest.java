@@ -78,7 +78,7 @@ class DataLiftTest {
 
     dataLift.execute(context);
 
-    verify(runner).execute(eq(context), this.migrations.capture());
+    verify(runner).execute(eq(context), eq(versionInfo), this.migrations.capture());
     assertThat(this.migrations.getValue())
         .extracting(m -> m.version())
         .containsExactly(migrationsToExecute.toArray(new Integer[]{}));

@@ -36,7 +36,7 @@ public class DataLift {
     if (migrationsToExecute.isEmpty()) {
       return;
     }
-    runner.execute(context, migrationsToExecute);
+    runner.execute(context, version, migrationsToExecute);
   }
 
   private List<DataMigration> getMigrationsToExecute(List<DataMigration> foundMigrations, VersionInfo version) {
