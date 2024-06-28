@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.List;
 import java.util.stream.Stream;
+import com.commercetools.api.client.ProjectApiRoot;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -78,7 +79,7 @@ class DataLiftTest {
 
     dataLift.execute(context);
 
-    verify(runner).execute(eq(context), this.migrations.capture());
+    verify(runner).execute(eq(context), eq(versionInfo), this.migrations.capture());
     assertThat(this.migrations.getValue())
         .extracting(m -> m.version())
         .containsExactly(migrationsToExecute.toArray(new Integer[]{}));
@@ -100,7 +101,17 @@ class DataLiftTest {
   }
 
   private static DataMigration fakeMigration(int migrationVersion) {
-    return () -> migrationVersion;
+    return new DataMigration() {
+      @Override
+      public int version() {
+        return migrationVersion;
+      }
+
+      @Override
+      public void execute(ProjectApiRoot projectApiRoot) {
+
+      }
+    };
   }
 
   private record MigrationsToExecute(List<Integer> migrations, int currentVersion) {
