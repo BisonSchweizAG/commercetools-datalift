@@ -49,7 +49,7 @@ class DataLiftTest {
     final List<DataMigration> migrations = data.migrations.stream().map(v -> fakeMigration(v)).toList();
     final Context context = null;
     when(migrationLoader.load(context)).thenReturn(migrations);
-    final VersionInfo versionInfo = new VersionInfo(data.currentVersion());
+    final VersionInfo versionInfo = createVersionInfo(data.currentVersion());
     when(versioner.currentVersion(context)).thenReturn(versionInfo);
     DataLift dataLift = new DataLift(versioner, migrationLoader, runner);
 
@@ -72,7 +72,7 @@ class DataLiftTest {
     final List<Integer> migrationsToExecute = data.toExecute();
     final Context context = null;
     when(migrationLoader.load(context)).thenReturn(migrations);
-    final VersionInfo versionInfo = new VersionInfo(currentVersion);
+    final VersionInfo versionInfo = createVersionInfo(currentVersion);
     when(versioner.currentVersion(context)).thenReturn(versionInfo);
     DataLift dataLift = new DataLift(versioner, migrationLoader, runner);
 
@@ -93,6 +93,10 @@ class DataLiftTest {
         new MigrationsNoAction(List.of(3, 2, 4, 1), 1, List.of(2, 3, 4)),
         new MigrationsNoAction(List.of(1, 4, 3, 2), 2, List.of(3, 4))
     );
+  }
+
+  private VersionInfo createVersionInfo(int version) {
+    return new VersionInfo(version, Long.valueOf(version));
   }
 
   private static DataMigration fakeMigration(int migrationVersion) {

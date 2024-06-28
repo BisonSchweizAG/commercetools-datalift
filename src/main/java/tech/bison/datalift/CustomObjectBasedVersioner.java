@@ -1,8 +1,12 @@
 package tech.bison.datalift;
 
+import com.commercetools.api.models.custom_object.CustomObjectDraft;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.vrap.rmf.base.client.error.NotFoundException;
 
+/**
+ * Persists version info in a commercetools custom object.
+ */
 public class CustomObjectBasedVersioner implements Versioner {
 
   private final ObjectMapper objectMapper;
@@ -16,13 +20,27 @@ public class CustomObjectBasedVersioner implements Versioner {
   @Override
   public VersionInfo currentVersion(Context context) {
     try {
-      var response = context.getProjectApiRoot().customObjects()
+      var responseBody = context.getProjectApiRoot().customObjects()
           .withContainerAndKey(VERSION_CONTAINER, VERSION_OBJECT_KEY).get()
-          .executeBlocking();
-      var version = objectMapper.convertValue(response.getBody().getValue(), VersionInfoDto.class);
-      return new VersionInfo(version.current());
+          .executeBlocking()
+          .getBody();
+      var version = objectMapper.convertValue(responseBody.getValue(), VersionInfoDto.class);
+      return new VersionInfo(version.current(), responseBody.getVersion());
     } catch (NotFoundException ex) {
-      return new VersionInfo(0);
+      return VersionInfo.initialVersion();
     }
+  }
+
+  @Override
+  public VersionInfo updateVersion(Context context, int newVersion, Long documentVersion) {
+    var versionInfoDto = new VersionInfoDto(newVersion);
+    var draft = CustomObjectDraft.builder()
+        .container(VERSION_CONTAINER)
+        .key(VERSION_OBJECT_KEY)
+        .version(documentVersion)
+        .value(versionInfoDto)
+        .build();
+    var updateResponse = context.getProjectApiRoot().customObjects().post(draft).executeBlocking();
+    return new VersionInfo(newVersion, updateResponse.getBody().getVersion());
   }
 }
