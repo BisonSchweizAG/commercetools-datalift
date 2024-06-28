@@ -24,9 +24,9 @@ public class DataLift {
     this.runner = runner;
   }
 
-  public static DataLift createWithDefaults() {
+  public static DataLift createWithDefaults(String classpathFilter) {
     final Versioner versioner = new CustomObjectBasedVersioner(new ObjectMapper());
-    final MigrationLoader migrationLoader = new ClasspathMigrationLoader("");
+    final MigrationLoader migrationLoader = new ClasspathMigrationLoader(classpathFilter);
     final Runner runner = new RunnerImpl(versioner);
     return new DataLift(versioner, migrationLoader, runner);
   }

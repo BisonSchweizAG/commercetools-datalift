@@ -23,6 +23,8 @@ public class Main implements Runnable {
   private String authUrl;
   @Option(names = {"--projectKey"}, required = true)
   private String projectKey;
+  @Option(names = {"--packageFilter"}, required = true, description = "Package filter")
+  private String packageFilter;
 
   public static void main(String[] args) {
     CommandLine.run(new Main(), args);
@@ -31,8 +33,16 @@ public class Main implements Runnable {
   @Override
   public void run() {
     System.out.println("Now we would execute DataLift with [" + clientId + "][" + clientSecret + "][" + apiUrl + "][" + authUrl + "][" + projectKey + "]");
-    var context = new ContextCreator().create(new CommercetoolsProperties(clientId, clientSecret, apiUrl, authUrl, projectKey));
-    DataLift.createWithDefaults().execute(context);
+    final var context = new ContextCreator().create(new CommercetoolsProperties(clientId, clientSecret, apiUrl, authUrl, projectKey));
+    final String classpathFilter = getClasspathFilter();
+    DataLift.createWithDefaults(classpathFilter).execute(context);
     System.out.println("DataLift end");
+  }
+
+  private String getClasspathFilter() {
+    if (packageFilter == null || packageFilter.length() <= 1) {
+      throw new IllegalArgumentException("PackageFilter must be defined");
+    }
+    return packageFilter;
   }
 }
