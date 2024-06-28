@@ -21,8 +21,16 @@ package tech.bison.datalift.core;
 
 import com.commercetools.api.client.ProjectApiRoot;
 
+/**
+ * Interface vor a coded datalift data migration
+ */
 public interface DataMigration {
 
+  /**
+   * The version of this data migration. Migrations are executed in ascending order of their versions.
+   *
+   * @return
+   */
   int version();
 
   void execute(ProjectApiRoot projectApiRoot);

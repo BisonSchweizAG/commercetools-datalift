@@ -33,6 +33,9 @@ import tech.bison.datalift.core.versioner.CustomObjectBasedVersioner;
 import tech.bison.datalift.core.versioner.VersionInfo;
 import tech.bison.datalift.core.versioner.Versioner;
 
+/**
+ * Entry point for a data migration run.
+ */
 public class DataLift {
 
   private static Logger LOG = LoggerFactory.getLogger(DataLift.class);
@@ -54,6 +57,11 @@ public class DataLift {
     return new DataLift(versioner, migrationLoader, runner);
   }
 
+  /**
+   * Executes the provided data migrations. Previously executed migrations are not run again.
+   *
+   * @throws DataLiftException in case of any exception thrown during execution.
+   */
   public void execute(Context context) {
     try {
       final List<DataMigration> foundMigrations = migrationLoader.load(context);
