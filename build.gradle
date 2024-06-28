@@ -21,5 +21,12 @@ test {
 }
 
 repositories {
-  mavenCentral()
+  if (project.hasProperty('REPO1_URL')) {
+    maven {
+      url REPO1_URL
+    }
+  } else {
+    mavenCentral()
+  }
+
 }
