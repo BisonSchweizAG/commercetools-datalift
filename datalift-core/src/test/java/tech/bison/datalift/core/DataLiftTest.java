@@ -145,6 +145,11 @@ class DataLiftTest {
       }
 
       @Override
+      public String description() {
+        return "";
+      }
+
+      @Override
       public void execute(ProjectApiRoot projectApiRoot) {
 
       }

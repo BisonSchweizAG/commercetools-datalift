@@ -30,6 +30,11 @@ public class TestDataMigration implements DataMigration {
   }
 
   @Override
+  public String description() {
+    return "TestDataMigration";
+  }
+
+  @Override
   public void execute(ProjectApiRoot projectApiRoot) {
 
   }
