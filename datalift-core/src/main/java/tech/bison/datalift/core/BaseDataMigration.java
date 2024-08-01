@@ -75,7 +75,5 @@ public abstract class BaseDataMigration implements DataMigration {
   }
 
   @Override
-  public void execute(ProjectApiRoot projectApiRoot) {
-
-  }
+  public abstract void execute(ProjectApiRoot projectApiRoot);
 }

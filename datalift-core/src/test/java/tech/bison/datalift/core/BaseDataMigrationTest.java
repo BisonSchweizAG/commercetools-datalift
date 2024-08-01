@@ -1,10 +1,10 @@
 package tech.bison.datalift.core;
 
-import org.junit.jupiter.api.Test;
-import tech.bison.datalift.core.testmigration.V1_Data_Migration_with_description;
-import tech.bison.datalift.core.testmigration.InvalidDataMigration;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import static org.junit.jupiter.api.Assertions.*;
+import com.commercetools.api.client.ProjectApiRoot;
+import org.junit.jupiter.api.Test;
 
 class BaseDataMigrationTest {
 
@@ -22,4 +22,20 @@ class BaseDataMigrationTest {
     assertEquals("Data Migration with description", dataMigration.description());
   }
 
+}
+
+class V1_Data_Migration_with_description extends BaseDataMigration {
+
+  @Override
+  public void execute(ProjectApiRoot projectApiRoot) {
+
+  }
+}
+
+class InvalidDataMigration extends BaseDataMigration {
+
+  @Override
+  public void execute(ProjectApiRoot projectApiRoot) {
+
+  }
 }
