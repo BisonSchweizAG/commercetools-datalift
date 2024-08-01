@@ -11,6 +11,11 @@ public class SampleMigration implements DataMigration {
   }
 
   @Override
+  public String description() {
+    return "SampleMigration";
+  }
+
+  @Override
   public void execute(ProjectApiRoot projectApiRoot) {
     throw new IllegalStateException("Error in sample migration.");
   }
