@@ -17,7 +17,7 @@
  * limitations under the License.
  * =========================LICENSE_END==================================
  */
-package tech.bison.datalift.core.testmigration;
+package tech.bison.datalift.core.testmigration.valid;
 
 import com.commercetools.api.client.ProjectApiRoot;
 import tech.bison.datalift.core.DataMigration;

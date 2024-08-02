@@ -19,9 +19,12 @@
  */
 package tech.bison.datalift.core.loader;
 
+import java.lang.reflect.Modifier;
+import java.util.Comparator;
 import java.util.List;
 import org.reflections.Reflections;
 import tech.bison.datalift.core.Context;
+import tech.bison.datalift.core.DataLiftException;
 import tech.bison.datalift.core.DataMigration;
 
 public class ClasspathMigrationLoader implements MigrationLoader {
@@ -37,13 +40,15 @@ public class ClasspathMigrationLoader implements MigrationLoader {
     Reflections reflections = new Reflections(classpathFilter);
 
     return reflections.getSubTypesOf(DataMigration.class).stream()
+        .filter(clazz -> !Modifier.isAbstract(clazz.getModifiers()))
         .map(clazz -> {
           try {
             return (DataMigration) clazz.getDeclaredConstructor().newInstance();
           } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new DataLiftException("Unable to instantiate class " + clazz.getName() + " : " + e.getMessage(), e);
           }
         })
+        .sorted(Comparator.comparing(DataMigration::version))
         .toList();
   }
 }
