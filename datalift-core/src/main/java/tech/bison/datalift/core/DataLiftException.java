@@ -21,11 +21,11 @@ package tech.bison.datalift.core;
 
 public class DataLiftException extends RuntimeException {
 
-  DataLiftException(String message, Throwable throwable) {
+  public DataLiftException(String message, Throwable throwable) {
     super(message, throwable);
   }
 
-  DataLiftException(String message) {
+  public DataLiftException(String message) {
     super(message);
   }
 }
