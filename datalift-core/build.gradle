@@ -1,5 +1,6 @@
 dependencies {
   implementation libs.commercetools.java.api
+  implementation libs.commercetools.java.importapi
   implementation libs.jackson.core
   implementation libs.reflections
   implementation libs.slf4j

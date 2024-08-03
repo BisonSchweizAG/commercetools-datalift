@@ -17,25 +17,13 @@
  * limitations under the License.
  * =========================LICENSE_END==================================
  */
-package tech.bison.datalift.core.testmigration.valid;
+package tech.bison.datalift.core.api.resolver;
 
+import java.util.List;
 import tech.bison.datalift.core.api.executor.Context;
 import tech.bison.datalift.core.api.migration.DataMigration;
 
-public class TestDataMigration implements DataMigration {
+public interface MigrationResolver {
 
-  @Override
-  public int version() {
-    return 1;
-  }
-
-  @Override
-  public String description() {
-    return "TestDataMigration";
-  }
-
-  @Override
-  public void execute(Context context) {
-
-  }
+  List<DataMigration> resolve(Context context);
 }

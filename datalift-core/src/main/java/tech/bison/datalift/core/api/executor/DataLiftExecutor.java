@@ -17,25 +17,31 @@
  * limitations under the License.
  * =========================LICENSE_END==================================
  */
-package tech.bison.datalift.core.testmigration.valid;
+package tech.bison.datalift.core.api.executor;
 
-import tech.bison.datalift.core.api.executor.Context;
+import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tech.bison.datalift.core.api.migration.DataMigration;
+import tech.bison.datalift.core.api.versioner.VersionInfo;
+import tech.bison.datalift.core.api.versioner.Versioner;
 
-public class TestDataMigration implements DataMigration {
+public class DataLiftExecutor {
 
-  @Override
-  public int version() {
-    return 1;
+  private final static Logger LOG = LoggerFactory.getLogger(DataLiftExecutor.class);
+  private final Versioner versioner;
+
+  public DataLiftExecutor(Versioner versioner) {
+    this.versioner = versioner;
   }
 
-  @Override
-  public String description() {
-    return "TestDataMigration";
-  }
-
-  @Override
-  public void execute(Context context) {
-
+  public void execute(Context context, VersionInfo versionInfo, List<DataMigration> migrationsToExecute) {
+    VersionInfo currentVersionInfo = versionInfo;
+    for (DataMigration migration : migrationsToExecute) {
+      int version = migration.version();
+      LOG.info("Running data migration '{}', version '{}'.", migration.description(), version);
+      migration.execute(context);
+      currentVersionInfo = versioner.updateVersion(context, version, currentVersionInfo.documentVersion());
+    }
   }
 }

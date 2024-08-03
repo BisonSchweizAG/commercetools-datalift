@@ -17,25 +17,30 @@
  * limitations under the License.
  * =========================LICENSE_END==================================
  */
-package tech.bison.datalift.core.testmigration.valid;
+package tech.bison.datalift.core.api.migration;
 
 import tech.bison.datalift.core.api.executor.Context;
-import tech.bison.datalift.core.api.migration.DataMigration;
 
-public class TestDataMigration implements DataMigration {
+/**
+ * Interface for Java-based Migrations.
+ *
+ * <p>Migration classes implementing this interface will be
+ * automatically discovered when placed in the configured location on the classpath.</p>
+ *
+ * <p>Most users will be better served by subclassing subclass {@link BaseDataMigration} instead of implementing this
+ * interface directly, as {@link BaseDataMigration} encourages the use of Datalift's default naming convention and comes with helper methods for JSON-based Migrations.</p>
+ */
+public interface DataMigration {
 
-  @Override
-  public int version() {
-    return 1;
-  }
+  /**
+   * @return The version of this data migration. Migrations are executed in ascending order of their versions.
+   */
+  int version();
 
-  @Override
-  public String description() {
-    return "TestDataMigration";
-  }
+  /**
+   * @return The description of this migration for the migration history.
+   */
+  String description();
 
-  @Override
-  public void execute(Context context) {
-
-  }
+  void execute(Context context);
 }

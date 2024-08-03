@@ -17,25 +17,30 @@
  * limitations under the License.
  * =========================LICENSE_END==================================
  */
-package tech.bison.datalift.core.testmigration.valid;
+package tech.bison.datalift.core.api.versioner;
 
 import tech.bison.datalift.core.api.executor.Context;
-import tech.bison.datalift.core.api.migration.DataMigration;
 
-public class TestDataMigration implements DataMigration {
+/**
+ * Responsible to load and update version info in the data store
+ */
+public interface Versioner {
 
-  @Override
-  public int version() {
-    return 1;
-  }
+  /**
+   * Loads the current data migration version info from the data store
+   *
+   * @param context
+   * @return current version info
+   */
+  VersionInfo currentVersion(Context context);
 
-  @Override
-  public String description() {
-    return "TestDataMigration";
-  }
-
-  @Override
-  public void execute(Context context) {
-
-  }
+  /**
+   * Updates the data migration version in the data store
+   *
+   * @param context
+   * @param newVersion
+   * @param documentVersion identifier for optimistic locking
+   * @return the updated version info
+   */
+  VersionInfo updateVersion(Context context, int newVersion, Long documentVersion);
 }

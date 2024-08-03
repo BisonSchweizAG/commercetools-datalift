@@ -18,8 +18,11 @@ import org.testcontainers.containers.MockServerContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
-import tech.bison.datalift.core.versioner.CustomObjectBasedVersioner;
-import tech.bison.datalift.core.versioner.Versioner;
+import tech.bison.datalift.core.api.configuration.CommercetoolsProperties;
+import tech.bison.datalift.core.api.configuration.FluentConfiguration;
+import tech.bison.datalift.core.api.executor.Context;
+import tech.bison.datalift.core.api.versioner.Versioner;
+import tech.bison.datalift.core.internal.versioner.CustomObjectBasedVersioner;
 
 @Testcontainers
 class DataLiftIT {
@@ -38,14 +41,14 @@ class DataLiftIT {
   @BeforeEach
   void setUp() {
     var mockServerHostAndPort = "http://" + mockServer.getHost() + ":" + mockServer.getServerPort();
-    var commercetoolsProperties = new CommercetoolsProperties("test", "test", mockServerHostAndPort, mockServerHostAndPort + "/auth", "integrationtest");
-    context = new ContextCreator().create(commercetoolsProperties);
+    var configuration = new FluentConfiguration().withApiProperties(new CommercetoolsProperties("test", "test", mockServerHostAndPort, mockServerHostAndPort + "/auth", "integrationtest"));
+    context = new Context(configuration);
     versioner = new CustomObjectBasedVersioner(new ObjectMapper());
 
     mockServerClient = new MockServerClient(mockServer.getHost(), mockServer.getServerPort());
     mockServerClient
-          .when(request().withPath("/auth"))
-          .respond(response().withBody(readResponseFromFile("./responses/token.json")));
+        .when(request().withPath("/auth"))
+        .respond(response().withBody(readResponseFromFile("./responses/token.json")));
   }
 
   @AfterEach

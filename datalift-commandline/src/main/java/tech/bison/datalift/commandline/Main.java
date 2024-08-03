@@ -24,10 +24,9 @@ import org.slf4j.LoggerFactory;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
-import tech.bison.datalift.core.CommercetoolsProperties;
-import tech.bison.datalift.core.ContextCreator;
 import tech.bison.datalift.core.DataLift;
-import tech.bison.datalift.core.DataLiftException;
+import tech.bison.datalift.core.api.configuration.CommercetoolsProperties;
+import tech.bison.datalift.core.api.exception.DataLiftException;
 
 @Command(
     name = "datalift",
@@ -45,6 +44,14 @@ public class Main implements Runnable {
   private String apiUrl;
   @Option(names = {"--authUrl"}, required = true)
   private String authUrl;
+  @Option(names = {"--importClientId"})
+  private String importClientId;
+  @Option(names = {"--importClientSecret"})
+  private String importClientSecret;
+  @Option(names = {"--importApiUrl"})
+  private String importApiUrl;
+  @Option(names = {"--importAuthUrl"})
+  private String importAuthUrl;
   @Option(names = {"--projectKey"}, required = true)
   private String projectKey;
   @Option(names = {"--packageFilter"}, required = true, description = "Package filter")
@@ -60,10 +67,13 @@ public class Main implements Runnable {
   @Override
   public void run() {
     LOG.info("Now we would execute DataLift with [{}][{}}][{}}]", apiUrl, authUrl, projectKey);
-    final var context = new ContextCreator().create(new CommercetoolsProperties(clientId, clientSecret, apiUrl, authUrl, projectKey));
-    final String classpathFilter = getClasspathFilter();
     try {
-      DataLift.createWithDefaults(classpathFilter).execute(context);
+      final var dataLift = DataLift.configure()
+          .withApiProperties(new CommercetoolsProperties(clientId, clientSecret, apiUrl, authUrl, projectKey))
+          .withImportApiProperties(new CommercetoolsProperties(importClientId, importClientSecret, importApiUrl, importAuthUrl, projectKey))
+          .withClasspathFilter(getClasspathFilter())
+          .load();
+      dataLift.execute();
     } catch (DataLiftException ex) {
       LOG.error("An error occurred while executing data migrations.", ex);
     }

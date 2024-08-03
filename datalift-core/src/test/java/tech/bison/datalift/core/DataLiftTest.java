@@ -22,12 +22,12 @@ package tech.bison.datalift.core;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-import com.commercetools.api.client.ProjectApiRoot;
 import java.util.List;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
@@ -38,10 +38,15 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import tech.bison.datalift.core.loader.MigrationLoader;
-import tech.bison.datalift.core.runner.Runner;
-import tech.bison.datalift.core.versioner.VersionInfo;
-import tech.bison.datalift.core.versioner.Versioner;
+import tech.bison.datalift.core.api.configuration.FluentConfiguration;
+import tech.bison.datalift.core.api.exception.DataLiftException;
+import tech.bison.datalift.core.api.executor.Context;
+import tech.bison.datalift.core.api.executor.DataLiftExecutor;
+import tech.bison.datalift.core.api.migration.DataMigration;
+import tech.bison.datalift.core.api.resolver.MigrationResolver;
+import tech.bison.datalift.core.api.versioner.VersionInfo;
+import tech.bison.datalift.core.api.versioner.Versioner;
+
 
 @ExtendWith(MockitoExtension.class)
 class DataLiftTest {
@@ -49,35 +54,35 @@ class DataLiftTest {
   @Mock
   private Versioner versioner;
   @Mock
-  private MigrationLoader migrationLoader;
+  private MigrationResolver migrationResolver;
   @Mock
-  private Runner runner;
+  private DataLiftExecutor dataLiftExecutor;
+
+  private final FluentConfiguration configuration = new FluentConfiguration();
 
   @Captor
   private ArgumentCaptor<List<DataMigration>> migrations;
 
   @Test
   void exceptionOnLoadThenThrowDataLiftException() {
-    Context context = null;
     var innerException = new IllegalStateException();
-    when(migrationLoader.load(context)).thenThrow(innerException);
-    DataLift dataLift = new DataLift(versioner, migrationLoader, runner);
+    when(migrationResolver.resolve(any())).thenThrow(innerException);
+    DataLift dataLift = createDataLift();
 
-    var exception = assertThrows(DataLiftException.class, () -> dataLift.execute(context));
+    var exception = assertThrows(DataLiftException.class, dataLift::execute);
     assertEquals("Error while executing data migrations.", exception.getMessage());
     assertEquals(innerException, exception.getCause());
   }
 
   @Test
   void noMigrationsResultInNoAction() {
-    Context context = null;
-    when(migrationLoader.load(context)).thenReturn(List.of());
-    DataLift dataLift = new DataLift(versioner, migrationLoader, runner);
+    when(migrationResolver.resolve(any())).thenReturn(List.of());
+    DataLift dataLift = createDataLift();
 
-    dataLift.execute(context);
+    dataLift.execute();
 
     verifyNoInteractions(versioner);
-    verifyNoInteractions(runner);
+    verifyNoInteractions(dataLiftExecutor);
   }
 
 
@@ -85,15 +90,14 @@ class DataLiftTest {
   @MethodSource("testDataForNoAction")
   void migrationsResultInNoAction(MigrationsToExecute data) {
     final List<DataMigration> migrations = data.migrations.stream().map(v -> fakeMigration(v)).toList();
-    final Context context = null;
-    when(migrationLoader.load(context)).thenReturn(migrations);
+    when(migrationResolver.resolve(any())).thenReturn(migrations);
     final VersionInfo versionInfo = createVersionInfo(data.currentVersion());
-    when(versioner.currentVersion(context)).thenReturn(versionInfo);
-    DataLift dataLift = new DataLift(versioner, migrationLoader, runner);
+    when(versioner.currentVersion(any())).thenReturn(versionInfo);
+    DataLift dataLift = createDataLift();
 
-    dataLift.execute(context);
+    dataLift.execute();
 
-    verifyNoInteractions(runner);
+    verifyNoInteractions(dataLiftExecutor);
   }
 
   static Stream<MigrationsToExecute> testDataForNoAction() {
@@ -108,15 +112,14 @@ class DataLiftTest {
     final List<DataMigration> migrations = data.migrations.stream().map(v -> fakeMigration(v)).toList();
     final int currentVersion = data.current();
     final List<Integer> migrationsToExecute = data.toExecute();
-    final Context context = null;
-    when(migrationLoader.load(context)).thenReturn(migrations);
+    when(migrationResolver.resolve(any())).thenReturn(migrations);
     final VersionInfo versionInfo = createVersionInfo(currentVersion);
-    when(versioner.currentVersion(context)).thenReturn(versionInfo);
-    DataLift dataLift = new DataLift(versioner, migrationLoader, runner);
+    when(versioner.currentVersion(any())).thenReturn(versionInfo);
+    DataLift dataLift = createDataLift();
 
-    dataLift.execute(context);
+    dataLift.execute();
 
-    verify(runner).execute(eq(context), eq(versionInfo), this.migrations.capture());
+    verify(dataLiftExecutor).execute(any(), eq(versionInfo), this.migrations.capture());
     assertThat(this.migrations.getValue())
         .extracting(m -> m.version())
         .containsExactly(migrationsToExecute.toArray(new Integer[]{}));
@@ -137,6 +140,10 @@ class DataLiftTest {
     return new VersionInfo(version, Long.valueOf(version));
   }
 
+  private DataLift createDataLift() {
+    return new DataLift(configuration, versioner, migrationResolver, dataLiftExecutor);
+  }
+
   private static DataMigration fakeMigration(int migrationVersion) {
     return new DataMigration() {
       @Override
@@ -150,7 +157,7 @@ class DataLiftTest {
       }
 
       @Override
-      public void execute(ProjectApiRoot projectApiRoot) {
+      public void execute(Context context) {
 
       }
     };

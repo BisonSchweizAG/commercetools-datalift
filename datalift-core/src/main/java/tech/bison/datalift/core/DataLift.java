@@ -26,38 +26,51 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import tech.bison.datalift.core.loader.ClasspathMigrationLoader;
-import tech.bison.datalift.core.loader.MigrationLoader;
-import tech.bison.datalift.core.runner.Runner;
-import tech.bison.datalift.core.runner.RunnerImpl;
-import tech.bison.datalift.core.versioner.CustomObjectBasedVersioner;
-import tech.bison.datalift.core.versioner.VersionInfo;
-import tech.bison.datalift.core.versioner.Versioner;
+import tech.bison.datalift.core.api.configuration.Configuration;
+import tech.bison.datalift.core.api.configuration.FluentConfiguration;
+import tech.bison.datalift.core.api.exception.DataLiftException;
+import tech.bison.datalift.core.api.executor.Context;
+import tech.bison.datalift.core.api.executor.DataLiftExecutor;
+import tech.bison.datalift.core.api.migration.DataMigration;
+import tech.bison.datalift.core.api.resolver.MigrationResolver;
+import tech.bison.datalift.core.api.versioner.VersionInfo;
+import tech.bison.datalift.core.api.versioner.Versioner;
+import tech.bison.datalift.core.internal.resolver.ClasspathMigrationResolver;
+import tech.bison.datalift.core.internal.versioner.CustomObjectBasedVersioner;
 
 /**
  * Entry point for a data migration run.
  */
 public class DataLift {
 
-  private static Logger LOG = LoggerFactory.getLogger(DataLift.class);
+  private static final Logger LOG = LoggerFactory.getLogger(DataLift.class);
 
+  private final Configuration configuration;
   private final Versioner versioner;
-  private final MigrationLoader migrationLoader;
-  private final Runner runner;
+  private final MigrationResolver migrationResolver;
+  private final DataLiftExecutor dataLiftExecutor;
 
-  public DataLift(Versioner versioner, MigrationLoader migrationLoader, Runner runner) {
+  /**
+   * Constructor for testing
+   */
+  DataLift(Configuration configuration, Versioner versioner, MigrationResolver migrationResolver, DataLiftExecutor dataLiftExecutor) {
+    this.configuration = configuration;
     this.versioner = versioner;
-    this.migrationLoader = migrationLoader;
-    this.runner = runner;
+    this.migrationResolver = migrationResolver;
+    this.dataLiftExecutor = dataLiftExecutor;
   }
 
-  public static DataLift createWithDefaults(String classpathFilter) {
+  public DataLift(Configuration configuration) {
+    this.configuration = configuration;
     var objectMapper = new ObjectMapper()
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    final Versioner versioner = new CustomObjectBasedVersioner(objectMapper);
-    final MigrationLoader migrationLoader = new ClasspathMigrationLoader(classpathFilter);
-    final Runner runner = new RunnerImpl(versioner);
-    return new DataLift(versioner, migrationLoader, runner);
+    this.versioner = new CustomObjectBasedVersioner(objectMapper);
+    this.migrationResolver = new ClasspathMigrationResolver(configuration.getClasspathFilter());
+    this.dataLiftExecutor = new DataLiftExecutor(versioner);
+  }
+
+  public static FluentConfiguration configure() {
+    return new FluentConfiguration();
   }
 
   /**
@@ -65,9 +78,10 @@ public class DataLift {
    *
    * @throws DataLiftException in case of any exception thrown during execution.
    */
-  public void execute(Context context) {
+  public void execute() {
     try {
-      final List<DataMigration> foundMigrations = migrationLoader.load(context);
+      var context = createContext();
+      final List<DataMigration> foundMigrations = migrationResolver.resolve(context);
       if (foundMigrations.isEmpty()) {
         LOG.info("No data migrations found.");
         return;
@@ -79,10 +93,14 @@ public class DataLift {
         LOG.info("Data migrations are on current version. Nothing to execute.");
         return;
       }
-      runner.execute(context, version, migrationsToExecute);
+      dataLiftExecutor.execute(context, version, migrationsToExecute);
     } catch (Exception ex) {
       throw new DataLiftException("Error while executing data migrations.", ex);
     }
+  }
+
+  private Context createContext() {
+    return new Context(configuration);
   }
 
   private List<DataMigration> getMigrationsToExecute(List<DataMigration> foundMigrations, VersionInfo version) {

@@ -17,25 +17,8 @@
  * limitations under the License.
  * =========================LICENSE_END==================================
  */
-package tech.bison.datalift.core.testmigration.valid;
+package tech.bison.datalift.core.api.configuration;
 
-import tech.bison.datalift.core.api.executor.Context;
-import tech.bison.datalift.core.api.migration.DataMigration;
+public record CommercetoolsProperties(String clientId, String clientSecret, String apiUrl, String authUrl, String projectKey) {
 
-public class TestDataMigration implements DataMigration {
-
-  @Override
-  public int version() {
-    return 1;
-  }
-
-  @Override
-  public String description() {
-    return "TestDataMigration";
-  }
-
-  @Override
-  public void execute(Context context) {
-
-  }
 }
