@@ -11,7 +11,7 @@ Add the latest Datalift dependency to your project.
 create a data migration class inside your project and use the commercetools project api root object to perform the migration logic.
 
 ```java
-class V1_fix_Data_Migration_with_description extends BaseDataMigration {
+class V1__Data_Migration_with_description extends BaseDataMigration {
 
     @Override
     public void execute(Context context) {
