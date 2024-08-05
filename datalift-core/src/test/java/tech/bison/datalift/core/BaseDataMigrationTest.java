@@ -16,7 +16,7 @@ class BaseDataMigrationTest {
 
   @Test
   void init_validName_parseVersionAndDescription() {
-    var dataMigration = new V1_Data_Migration_with_description();
+    var dataMigration = new V1__Data_Migration_with_description();
 
     assertEquals(1, dataMigration.version());
     assertEquals("Data Migration with description", dataMigration.description());
@@ -24,7 +24,7 @@ class BaseDataMigrationTest {
 
 }
 
-class V1_Data_Migration_with_description extends BaseDataMigration {
+class V1__Data_Migration_with_description extends BaseDataMigration {
 
   @Override
   public void execute(ProjectApiRoot projectApiRoot) {

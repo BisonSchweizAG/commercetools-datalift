@@ -23,7 +23,7 @@ import com.commercetools.api.client.ProjectApiRoot;
 
 public abstract class BaseDataMigration implements DataMigration {
 
-  private final static String MIGRATION_INFO_SEPARATOR = "_";
+  private final static String MIGRATION_INFO_SEPARATOR = "__";
   private int version;
   private String description;
 
@@ -51,14 +51,14 @@ public abstract class BaseDataMigration implements DataMigration {
     }
     int separatorPos = shortName.indexOf(MIGRATION_INFO_SEPARATOR);
     if (separatorPos < 0) {
-      throw new DataLiftException("Wrong versioned migration name format: " + shortName
-          + ". It must contain a version and should look like this: V{version}_{description}");
+      throw new DataLiftException("Wrong version migration name format: " + shortName
+          + ". It must contain a version and should look like this: V{version}__{description}");
     } else {
       try {
         version = Integer.parseInt(shortName.substring(1, separatorPos));
-        description = shortName.substring(separatorPos + 1).replace("_", " ");
+        description = shortName.substring(separatorPos + 1).replace("_", " ").trim();
       } catch (NumberFormatException e) {
-        throw new DataLiftException("Wrong versioned migration name format: " + shortName
+        throw new DataLiftException("Wrong version migration name format: " + shortName
             + " (could not recognise version number " + version + ")", e);
       }
     }

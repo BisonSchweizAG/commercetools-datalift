@@ -29,7 +29,7 @@ import org.mockito.Mockito;
 import tech.bison.datalift.core.Context;
 import tech.bison.datalift.core.DataLiftException;
 import tech.bison.datalift.core.testmigration.valid.TestDataMigration;
-import tech.bison.datalift.core.testmigration.valid.V2_Test_DataMigration_with_description;
+import tech.bison.datalift.core.testmigration.valid.V2__Test_DataMigration_with_description;
 
 class ClasspathMigrationLoaderTest {
 
@@ -42,7 +42,7 @@ class ClasspathMigrationLoaderTest {
 
     assertEquals(2, result.size());
     assertEquals(TestDataMigration.class, result.get(0).getClass());
-    assertEquals(V2_Test_DataMigration_with_description.class, result.get(1).getClass());
+    assertEquals(V2__Test_DataMigration_with_description.class, result.get(1).getClass());
   }
 
   @Test
