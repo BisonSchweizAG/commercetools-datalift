@@ -8,9 +8,18 @@ Add the latest Datalift dependency to your project.
 
 ## Getting Started
 
-create a data migration class inside your project and use the commercetools project api root object to perform the migration logic.
+Datalift adheres to the following ***naming convention for migration scripts***:  
+*\<Version>__\<Description>.java*
+
+So let's create a migration directory *src/main/java/data/migration* inside our project.  
+Followed by a data migration class called **V1__Data_Migration_with_description.java**:
 
 ```java
+package data.migration;
+
+import tech.bison.datalift.core.api.executor.Context;
+import tech.bison.datalift.core.api.migration.BaseDataMigration;
+
 class V1__Data_Migration_with_description extends BaseDataMigration {
 
     @Override
@@ -21,12 +30,13 @@ class V1__Data_Migration_with_description extends BaseDataMigration {
 }
 ```
 
-configure Datalift using the Datalift root object and execute the migration
+We use the commercetools project api root object in the migration above to perform the migration logic.
+
+Now let's configure Datalift using the Datalift root object and execute the migration
 
 ```java
 DataLift dataLift = DataLift.configure()
         .withApiProperties(new CommercetoolsProperties("clientId", "clientSecret", "apiUrl", "authUrl", "projectKey"))
-        .withClasspathFilter("example.package.name")
         .load()
         .execute();
 ```
@@ -41,8 +51,7 @@ java -cp "datalift-commandline.jar;your-fat-jar.jar" tech.bison.datalift.command
                 --authUrl=https://auth.europe-west1.gcp.commercetools.com/ 
                 --clientId=someClientId 
                 --clientSecret=someClientSecret 
-                --projectKey=someProjetKey 
-                --packageFilter=sample.package.filter
+                --projectKey=someProjetKey
 ```
 
 ## Building

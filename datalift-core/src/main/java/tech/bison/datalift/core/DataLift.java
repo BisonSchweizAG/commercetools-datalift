@@ -61,7 +61,7 @@ public class DataLift {
     var objectMapper = new ObjectMapper()
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     this.versioner = new CustomObjectBasedVersioner(objectMapper);
-    this.migrationResolver = new ClasspathMigrationResolver(configuration.getClasspathFilter());
+    this.migrationResolver = new ClasspathMigrationResolver(configuration.getLocations());
     this.dataLiftExecutor = new DataLiftExecutor(versioner);
   }
 

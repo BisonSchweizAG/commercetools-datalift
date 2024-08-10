@@ -15,18 +15,27 @@
  */
 package tech.bison.datalift.core.api.configuration;
 
+import static java.util.stream.Collectors.toList;
+
 import com.commercetools.api.client.ProjectApiRoot;
+import java.util.Arrays;
+import java.util.List;
 import tech.bison.datalift.core.DataLift;
+import tech.bison.datalift.core.api.Location;
 import tech.bison.datalift.core.api.exception.DataLiftException;
 
 
 public class FluentConfiguration implements Configuration {
 
-  private String classpathFilter;
+  private List<String> locations;
   private ProjectApiRoot projectApiRoot;
   private CommercetoolsProperties apiProperties;
   private CommercetoolsProperties importApiProperties;
   private com.commercetools.importapi.client.ProjectApiRoot importApiRoot;
+
+  public FluentConfiguration() {
+    withLocations("data.migration");
+  }
 
   /**
    * @return The new fully-configured Datalift instance.
@@ -43,10 +52,12 @@ public class FluentConfiguration implements Configuration {
   }
 
   /**
-   * Configure the package of the data migration classes.
+   * Configures the locations to scan recursively for migrations. Must point to a valid package name on the classpath
+   *
+   * @param locations Locations to scan recursively for migrations. (default: data.migration)
    */
-  public FluentConfiguration withClasspathFilter(String classpathFilter) {
-    this.classpathFilter = classpathFilter;
+  public FluentConfiguration withLocations(String... locations) {
+    this.locations = Arrays.stream(locations).collect(toList());
     return this;
   }
 
@@ -83,11 +94,6 @@ public class FluentConfiguration implements Configuration {
   }
 
   @Override
-  public String getClasspathFilter() {
-    return classpathFilter;
-  }
-
-  @Override
   public ProjectApiRoot getApiRoot() {
     return projectApiRoot;
   }
@@ -105,5 +111,10 @@ public class FluentConfiguration implements Configuration {
   @Override
   public com.commercetools.importapi.client.ProjectApiRoot getImportApiRoot() {
     return importApiRoot;
+  }
+
+  @Override
+  public List<Location> getLocations() {
+    return locations.stream().map(Location::new).toList();
   }
 }

@@ -34,7 +34,7 @@ import tech.bison.datalift.core.api.exception.DataLiftException;
 )
 public class Main implements Runnable {
 
-  private static Logger LOG = LoggerFactory.getLogger(Main.class);
+  private static final Logger LOG = LoggerFactory.getLogger(Main.class);
 
   @Option(names = {"--clientId"}, required = true)
   private String clientId;
@@ -54,8 +54,8 @@ public class Main implements Runnable {
   private String importAuthUrl;
   @Option(names = {"--projectKey"}, required = true)
   private String projectKey;
-  @Option(names = {"--packageFilter"}, required = true, description = "Package filter")
-  private String packageFilter;
+  @Option(names = {"--locations"}, required = false, description = "A comma seperated list of packages to scan")
+  private String locations;
 
 
   public static void main(String[] args) {
@@ -68,22 +68,20 @@ public class Main implements Runnable {
   public void run() {
     LOG.info("Now we would execute DataLift with [{}][{}}][{}}]", apiUrl, authUrl, projectKey);
     try {
-      final var dataLift = DataLift.configure()
+      var dataliftBuilder = DataLift.configure()
           .withApiProperties(new CommercetoolsProperties(clientId, clientSecret, apiUrl, authUrl, projectKey))
-          .withImportApiProperties(new CommercetoolsProperties(importClientId, importClientSecret, importApiUrl, importAuthUrl, projectKey))
-          .withClasspathFilter(getClasspathFilter())
-          .load();
-      dataLift.execute();
+          .withImportApiProperties(new CommercetoolsProperties(importClientId, importClientSecret, importApiUrl, importAuthUrl, projectKey));
+      if (locations != null) {
+        dataliftBuilder.withLocations(getLocations());
+      }
+      dataliftBuilder.load().execute();
     } catch (DataLiftException ex) {
       LOG.error("An error occurred while executing data migrations.", ex);
     }
     LOG.info("DataLift end");
   }
 
-  private String getClasspathFilter() {
-    if (packageFilter == null || packageFilter.length() <= 1) {
-      throw new IllegalArgumentException("PackageFilter must be defined");
-    }
-    return packageFilter;
+  private String[] getLocations() {
+    return locations.split(",");
   }
 }

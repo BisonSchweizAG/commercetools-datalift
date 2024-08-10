@@ -16,9 +16,13 @@
 package tech.bison.datalift.core.internal.resolver;
 
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import org.reflections.Reflections;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import tech.bison.datalift.core.api.Location;
 import tech.bison.datalift.core.api.exception.DataLiftException;
 import tech.bison.datalift.core.api.executor.Context;
 import tech.bison.datalift.core.api.migration.DataMigration;
@@ -26,16 +30,25 @@ import tech.bison.datalift.core.api.resolver.MigrationResolver;
 
 public class ClasspathMigrationResolver implements MigrationResolver {
 
-  private final String classpathFilter;
+  private static final Logger LOG = LoggerFactory.getLogger(ClasspathMigrationResolver.class);
+  private final List<Location> locations;
 
-  public ClasspathMigrationResolver(String classpathFilter) {
-    this.classpathFilter = classpathFilter;
+  public ClasspathMigrationResolver(List<Location> locations) {
+    this.locations = locations;
   }
 
   @Override
   public List<DataMigration> resolve(Context context) {
-    Reflections reflections = new Reflections(classpathFilter);
+    List<DataMigration> migrations = new ArrayList<>();
+    for (Location location : locations) {
+      migrations.addAll(getMigrations(location.getPath()));
+    }
+    return migrations;
+  }
 
+  private List<DataMigration> getMigrations(String location) {
+    LOG.debug("Loading data migrations from '" + location + "' ...");
+    Reflections reflections = new Reflections(location);
     return reflections.getSubTypesOf(DataMigration.class).stream()
         .filter(clazz -> !Modifier.isAbstract(clazz.getModifiers()))
         .map(clazz -> {

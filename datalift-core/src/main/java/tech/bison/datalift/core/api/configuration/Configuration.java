@@ -16,10 +16,12 @@
 package tech.bison.datalift.core.api.configuration;
 
 import com.commercetools.api.client.ProjectApiRoot;
+import java.util.List;
+import tech.bison.datalift.core.api.Location;
 
 public interface Configuration {
 
-  String getClasspathFilter();
+  List<Location> getLocations();
 
   ProjectApiRoot getApiRoot();
 
