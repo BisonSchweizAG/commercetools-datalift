@@ -41,7 +41,7 @@ public class ClasspathMigrationResolver implements MigrationResolver {
   public List<DataMigration> resolve(Context context) {
     List<DataMigration> migrations = new ArrayList<>();
     for (Location location : locations) {
-      migrations.addAll(getMigrations(location.getPath()));
+      migrations.addAll(getMigrations(location.path()));
     }
     return migrations;
   }
