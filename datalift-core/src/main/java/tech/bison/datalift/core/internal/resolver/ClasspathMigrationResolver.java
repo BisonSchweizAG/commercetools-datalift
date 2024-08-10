@@ -49,7 +49,7 @@ public class ClasspathMigrationResolver implements MigrationResolver {
   private List<DataMigration> getMigrations(String location) {
     LOG.debug("Loading data migrations from '" + location + "' ...");
     Reflections reflections = new Reflections(location);
-    return reflections.getSubTypesOf(DataMigration.class).stream()
+    var dataMigration = reflections.getSubTypesOf(DataMigration.class).stream()
         .filter(clazz -> !Modifier.isAbstract(clazz.getModifiers()))
         .map(clazz -> {
           try {
@@ -60,5 +60,8 @@ public class ClasspathMigrationResolver implements MigrationResolver {
         })
         .sorted(Comparator.comparing(DataMigration::version))
         .toList();
+
+    LOG.debug("Found migrations: " + dataMigration.size());
+    return dataMigration;
   }
 }
