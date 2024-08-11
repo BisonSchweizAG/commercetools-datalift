@@ -1,0 +1,7 @@
+<component name="CopyrightManager">
+  <settings default="bison">
+    <module2copyright>
+      <element module="Production" copyright="bison" />
+    </module2copyright>
+  </settings>
+</component>

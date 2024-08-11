@@ -2,7 +2,7 @@
  * ========================LICENSE_START=================================
  * datalift
  * ========================================================================
- * Copyright (C) 2000 - 2024 Bison Schweiz AG
+ * Copyright (C) 2024 Bison Schweiz AG
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
