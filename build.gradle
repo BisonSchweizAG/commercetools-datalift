@@ -1,8 +1,13 @@
 subprojects {
   apply plugin: 'java-library'
+  apply plugin: 'maven-publish'
+  apply plugin: 'signing'
   java {
     sourceCompatibility = '21'
+    withSourcesJar()
   }
+
+  group = 'tech.bison.datalift'
 
   repositories {
     if (project.hasProperty('REPO1_URL')) {
@@ -14,5 +19,4 @@ subprojects {
     }
 
   }
-
 }
