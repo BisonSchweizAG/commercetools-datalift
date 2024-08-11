@@ -33,7 +33,7 @@ DataLift dataLift = DataLift.configure()
 
 ## JSON-based migrations
 
-To execute a migration with JSON data we can create a JSON file in the resources folder and refer to it in a normal Java migration. We can deserialize the file manually or use the JsonUtils class from the commercetools SDK for this:
+To execute a migration with JSON data we can create a JSON file in the resources folder and refer to it in a normal Java migration. We can deserialize the file manually or use the helper method *readJsonFromResource()* from the base class *BaseDataMigration*:
 
 In the following example a CustomObjectDraft is read from a JSON-file and posted to the custom-objects endpoint:
 
@@ -43,7 +43,7 @@ class V1__MigrationWithJsonData extends BaseDataMigration {
     @Override
     public void execute(Context context) {
         var apiRoot = context.getProjectApiRoot();
-        CustomObjectDraft body = JsonUtils.readObjectFromResource("data/migration/createMyCustomObject.json", CustomObjectDraft.class);
+        CustomObjectDraft body = readJsonFromResource("data/migration/createMyCustomObject.json", CustomObjectDraft.class);
         apiRoot.customObjects().post(body);
     }
 }
