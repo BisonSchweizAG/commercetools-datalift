@@ -1,3 +1,6 @@
+plugins {
+  id 'org.jreleaser' version '1.13.1'
+}
 dependencies {
   implementation libs.commercetools.java.api
   implementation libs.commercetools.java.importapi
@@ -19,22 +22,43 @@ dependencies {
   runtimeOnly libs.commercetools.okhttp.client4
 }
 
-publishing {
-  publications {
-    mavenJava(MavenPublication) {
-      artifactId = 'datalift-core'
-      version = '0.9.0'
-      pom {
-        name = 'Datalift Core'
-        description = 'Core artifact of datalift, a tool for automating data migrations of commercetools applications'
-        licenses {
-          license {
-            name = 'The Apache License, Version 2.0'
-            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-          }
-        }
+jreleaser {
+  project {
+    gitRootSearch = true
+    description = 'Datalift is a tool to automate data migrations for commercetools based applications.'
+    authors = ['BisonSchweizAG']
+    license = 'Apache-2.0'
+    inceptionYear = '2024'
+    website = 'https://github.com/BisonSchweizAG/datalift'
+    docsUrl = 'https://github.com/BisonSchweizAG/datalift'
+    version = '0.9.0'
+    stereotype = 'NONE'
+  }
+
+  assemble {
+    javaArchive {
+      dataliftcore {
+        active = 'ALWAYS'
+        stereotype = 'NONE'
+        formats = [
+            'ZIP',
+            'TGZ'
+        ]
       }
-      from components.java
+    }
+  }
+
+  release {
+    github {
+      repoOwner = 'BisonSchweizAG'
+      overwrite = true
+    }
+  }
+  distributions {
+    dataliftcore {
+      artifact {
+        path = 'build/libs/{{distributionName}}-{{projectVersion}}.zip'
+      }
     }
   }
 }
