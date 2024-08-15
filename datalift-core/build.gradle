@@ -1,3 +1,8 @@
+import com.vanniktech.maven.publish.SonatypeHost
+
+plugins {
+  id("com.vanniktech.maven.publish") version "0.29.0"
+}
 dependencies {
   implementation libs.commercetools.java.api
   implementation libs.commercetools.java.importapi
@@ -19,52 +24,36 @@ dependencies {
   runtimeOnly libs.commercetools.okhttp.client4
 }
 
-publishing {
-  publications {
-    mavenJava(MavenPublication) {
-      artifactId = 'datalift-core'
-      version = '0.9-SNAPSHOT'
-      group = 'io.github.studix'
-      pom {
-        name = 'Datalift Core'
-        description = 'Core artifact of datalift, a tool for automating data migrations of commercetools applications'
-        url = 'https://github.com/BisonSchweizAG/datalift'
-        licenses {
-          license {
-            name = 'The Apache License, Version 2.0'
-            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-          }
-        }
-        developers {
-          developer {
-            id = 'studix'
-            name = 'Marco Studer'
-            email = 'marco.studer@bison-group.com'
-          }
-        }
-        scm {
-          connection = 'scm:git:git:github.com/BisonSchweizAG/datalift.git'
-          developerConnection = 'scm:git:ssh://github.com/BisonSchweizAG/datalift.git'
-          url = 'https://github.com/BisonSchweizAG/datalift'
-        }
-      }
-      from components.java
-    }
-  }
-  repositories {
-    maven {
-      name = "OSSRH"
-      url = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
-      credentials {
-        username = project.properties["ossrhUsername"]
-        password = project.properties["ossrhPassword"]
-      }
-    }
-  }
-}
+mavenPublishing {
+  publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+  signAllPublications()
+  coordinates("io.github.studix", "datalift", "0.9.0")
 
-signing {
-  sign publishing.publications.mavenJava
+  pom {
+    name = project.name
+    description = "Datalift is a tool to automate data migrations for commercetools based applications."
+    inceptionYear = "2024"
+    url = "https://github.com/BisonSchweizAG/datalift"
+    licenses {
+      license {
+        name = "The Apache License, Version 2.0"
+        url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        distribution = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    }
+    developers {
+      developer {
+        id = "BisonSchweizAG"
+        name = "Bison Schweiz AG"
+        url = "https://github.com/BisonSchweizAG"
+      }
+    }
+    scm {
+      url = "https://github.com/BisonSchweizAG/datalift"
+      connection = "scm:git:git://github.com/BisonSchweizAG/datalift.git"
+      developerConnection = "scm:git:ssh://git@github.com/BisonSchweizAG/datalift.git"
+    }
+  }
 }
 
 test {

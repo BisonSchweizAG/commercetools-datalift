@@ -1,7 +1,5 @@
 subprojects {
   apply plugin: 'java-library'
-  apply plugin: 'maven-publish'
-  apply plugin: 'signing'
   java {
     sourceCompatibility = '21'
     withSourcesJar()
