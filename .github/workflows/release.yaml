@@ -35,7 +35,7 @@ jobs:
           cache: maven
 
       - name: Build
-        run: ./gradlew build reckonTagPush -Preckon.stage=final -Preckon.scope=${{ github.event.inputs.releaseType }}
+        run: ./gradlew build reckonTagPush -Preckon.stage=final -Preckon.scope=${{ github.event.inputs.releaseType }} --stacktrace
 
       - name: Release
         run: ./gradlew datalift-core:publish --no-configuration-cache

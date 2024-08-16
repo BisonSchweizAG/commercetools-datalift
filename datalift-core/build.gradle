@@ -27,10 +27,10 @@ dependencies {
 mavenPublishing {
   publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, true)
   signAllPublications()
-  coordinates("io.github.studix", "datalift-core", project.version)
+  coordinates("io.github.studix", "datalift-core", "${project.version}")
 
   pom {
-    name = project.name
+    name = "Datalift Core"
     description = "Datalift is a tool to automate data migrations for commercetools based applications."
     inceptionYear = "2024"
     url = "https://github.com/BisonSchweizAG/datalift"
