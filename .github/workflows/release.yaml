@@ -3,26 +3,17 @@ name: Release
 on:
   workflow_dispatch:
     inputs:
-      version:
-        description: 'Release version'
+      releaseType:
+        type: choice
+        description: 'Release type'
+        options:
+          - Major
+          - Minor
+          - Patch
         required: true
 
 jobs:
-  precheck:
-    name: Precheck
-    runs-on: ubuntu-latest
-    outputs:
-      VERSION: ${{ steps.vars.outputs.VERSION }}
-    steps:
-      - name: Version
-        id: vars
-        shell: bash
-        run: |
-          echo "VERSION=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
-          VERSION=${{ github.event.inputs.version }}
-
   release:
-    needs: [ precheck ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -44,7 +35,7 @@ jobs:
           cache: maven
 
       - name: Build
-        run: ./gradlew build reckonTagPush -Preckon.stage=final -Preckon.scope=${{ github.event.inputs.version }}
+        run: ./gradlew build reckonTagPush -Preckon.stage=final -Preckon.scope=${{ github.event.inputs.releaseType }}
 
       - name: Release
         run: ./gradlew datalift-core:publish --no-configuration-cache
