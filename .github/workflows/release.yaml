@@ -14,11 +14,13 @@ jobs:
     outputs:
       VERSION: ${{ steps.vars.outputs.VERSION }}
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Version
         id: vars
         shell: bash
         run: |
-          echo "VERSION=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
           VERSION=${{ github.event.inputs.version }}
 
   release:
@@ -44,7 +46,7 @@ jobs:
           cache: maven
 
       - name: Build
-        run: ./gradlew build reckonTagPush -Preckon.stage=final -Preckon.scope=${{ github.event.inputs.version }}
+        run: ./gradlew build
 
       - name: Release
         run: ./gradlew datalift-core:publish --no-configuration-cache

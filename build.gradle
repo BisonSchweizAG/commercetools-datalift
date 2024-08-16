@@ -1,22 +1,11 @@
-plugins {
-  id 'org.ajoberstar.reckon' version '0.18.3'
-}
-
-reckon {
-  defaultInferredScope = 'minor'
-  snapshots()
-  scopeCalc = calcScopeFromProp()
-  stageCalc = calcStageFromProp()
-}
-
-group = 'tech.bison.datalift'
-
 subprojects {
   apply plugin: 'java-library'
   java {
     sourceCompatibility = '21'
     withSourcesJar()
   }
+
+  group = 'tech.bison.datalift'
 
   repositories {
     if (project.hasProperty('REPO1_URL')) {
