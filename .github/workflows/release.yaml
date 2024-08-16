@@ -27,14 +27,17 @@ jobs:
     needs: [ precheck ]
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          
+      - name: Set up JDK
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 21
           cache: gradle
-          ref: main
-          fetch-depth: 0
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
@@ -46,7 +49,7 @@ jobs:
         run: ./gradlew build
 
       - name: Release
-        run: ./gradlew publishToMavenCentral --no-configuration-cache
+        run: ./gradlew datalift-core:publishToMavenCentral --no-configuration-cache
         env:
           # Define secrets at https://github.com/BisonSchweizAG/datalift/settings
           # ------------------------------------------------------------------------------
