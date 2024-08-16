@@ -27,7 +27,7 @@ dependencies {
 mavenPublishing {
   publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, true)
   signAllPublications()
-  coordinates("io.github.studix", "datalift", "0.9.2")
+  coordinates("io.github.studix", "datalift", project.version)
 
   pom {
     name = project.name
