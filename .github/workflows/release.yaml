@@ -7,10 +7,6 @@ on:
         description: 'Release version'
         required: true
 
-env:
-  JAVA_VERSION: '21'
-  JAVA_DISTRO: 'temurin'
-
 jobs:
   precheck:
     name: Precheck
@@ -34,14 +30,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          distribution: temurin
+          java-version: 21
+          cache: gradle
           ref: main
           fetch-depth: 0
 
-      - name: Setup Java
-        uses: actions/setup-java@v4
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
         with:
-          java-version: ${{ env.JAVA_VERSION }}
-          distribution: ${{ env.JAVA_DISTRO }}
+          build-scan-publish: false
           cache: maven
 
       - name: Build
