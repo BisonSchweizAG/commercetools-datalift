@@ -49,7 +49,7 @@ jobs:
         run: ./gradlew build
 
       - name: Release
-        run: ./gradlew datalift-core:publishToMavenCentral --no-configuration-cache
+        run: ./gradlew datalift-core:publish --no-configuration-cache
         env:
           # Define secrets at https://github.com/BisonSchweizAG/datalift/settings
           # ------------------------------------------------------------------------------
