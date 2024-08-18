@@ -1,4 +1,4 @@
-package tech.bison.datalift.core.testmigration.valid;
+package tech.bison.datalift.core.testmigration.valid.sub;
 
 import tech.bison.datalift.core.api.executor.Context;
 import tech.bison.datalift.core.api.migration.DataMigration;
