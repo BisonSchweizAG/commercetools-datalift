@@ -40,7 +40,7 @@ class ClasspathMigrationResolverTest {
   @Test
   void resolve_migrationExistsInPackage_returnMigration() {
     var context = Mockito.mock(Context.class);
-    var classpathMigrationLoader = new ClasspathMigrationResolver(List.of(new Location("tech.bison.datalift.core.testmigration.valid")));
+    var classpathMigrationLoader = new ClasspathMigrationResolver(List.of(new Location("tech.bison.datalift.core.testmigration.valid")), getClassLoader());
 
     var result = classpathMigrationLoader.resolve(context);
 
@@ -52,7 +52,10 @@ class ClasspathMigrationResolverTest {
   @Test
   void resolve_multipleLocations_returnMigrations() {
     var context = Mockito.mock(Context.class);
-    var classpathMigrationLoader = new ClasspathMigrationResolver(List.of(new Location("tech.bison.datalift.core.testmigration.multiple.location1"), new Location("tech.bison.datalift.core.testmigration.multiple.location2")));
+    var classpathMigrationLoader = new ClasspathMigrationResolver(List.of(
+        new Location("tech.bison.datalift.core.testmigration.multiple.location1"),
+        new Location("tech.bison.datalift.core.testmigration.multiple.location2")),
+        getClassLoader());
 
     var result = classpathMigrationLoader.resolve(context);
 
@@ -64,7 +67,7 @@ class ClasspathMigrationResolverTest {
   @Test
   void resolve_noMigrationExistsInPackage_returnNoMigration() {
     var context = mock(Context.class);
-    var classpathMigrationLoader = new ClasspathMigrationResolver(List.of(new Location("tech.bison.datalift.foo")));
+    var classpathMigrationLoader = new ClasspathMigrationResolver(List.of(new Location("tech.bison.datalift.foo")), getClassLoader());
 
     var result = classpathMigrationLoader.resolve(context);
 
@@ -74,8 +77,12 @@ class ClasspathMigrationResolverTest {
   @Test
   void resolve_invalidMigrationExistsInPackage_throwsException() {
     var context = mock(Context.class);
-    var classpathMigrationLoader = new ClasspathMigrationResolver(List.of(new Location("tech.bison.datalift.core.testmigration.invalid")));
+    var classpathMigrationLoader = new ClasspathMigrationResolver(List.of(new Location("tech.bison.datalift.core.testmigration.invalid")), getClassLoader());
 
     assertThrows(DataLiftException.class, () -> classpathMigrationLoader.resolve(context));
+  }
+
+  private ClassLoader getClassLoader() {
+    return Thread.currentThread().getContextClassLoader();
   }
 }

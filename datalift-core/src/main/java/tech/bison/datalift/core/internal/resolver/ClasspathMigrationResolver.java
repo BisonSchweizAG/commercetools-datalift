@@ -15,11 +15,12 @@
  */
 package tech.bison.datalift.core.internal.resolver;
 
+import com.google.common.reflect.ClassPath;
+import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tech.bison.datalift.core.api.Location;
@@ -32,14 +33,17 @@ public class ClasspathMigrationResolver implements MigrationResolver {
 
   private static final Logger LOG = LoggerFactory.getLogger(ClasspathMigrationResolver.class);
   private final List<Location> locations;
+  private final ClassLoader classLoader;
 
-  public ClasspathMigrationResolver(List<Location> locations) {
+  public ClasspathMigrationResolver(List<Location> locations, ClassLoader classLoader) {
     this.locations = locations;
+    this.classLoader = classLoader;
   }
 
   @Override
   public List<DataMigration> resolve(Context context) {
     List<DataMigration> migrations = new ArrayList<>();
+
     for (Location location : locations) {
       migrations.addAll(getMigrations(location.path()));
     }
@@ -48,20 +52,27 @@ public class ClasspathMigrationResolver implements MigrationResolver {
 
   private List<DataMigration> getMigrations(String location) {
     LOG.debug("Loading data migrations from '" + location + "' ...");
-    Reflections reflections = new Reflections(location);
-    var dataMigration = reflections.getSubTypesOf(DataMigration.class).stream()
-        .filter(clazz -> !Modifier.isAbstract(clazz.getModifiers()))
-        .map(clazz -> {
-          try {
-            return (DataMigration) clazz.getDeclaredConstructor().newInstance();
-          } catch (Exception e) {
-            throw new DataLiftException("Unable to instantiate class " + clazz.getName() + " : " + e.getMessage(), e);
-          }
-        })
-        .sorted(Comparator.comparing(DataMigration::version))
-        .toList();
-
-    LOG.debug("Found migrations: " + dataMigration.size());
-    return dataMigration;
+    try {
+      var dataMigrations = ClassPath.from(classLoader)
+          .getTopLevelClassesRecursive(location)
+          .stream()
+          .map(ClassPath.ClassInfo::load)
+          .filter(DataMigration.class::isAssignableFrom)
+          .filter(clazz -> !Modifier.isAbstract(clazz.getModifiers()))
+          .map(clazz -> {
+            try {
+              return (DataMigration) clazz.getDeclaredConstructor().newInstance();
+            } catch (Exception e) {
+              throw new DataLiftException("Unable to instantiate class " + clazz.getName() + " : " + e.getMessage(), e);
+            }
+          })
+          .sorted(Comparator.comparing(DataMigration::version))
+          .toList();
+      LOG.debug("Found migrations: " + dataMigrations.size());
+      return dataMigrations;
+    } catch (IOException e) {
+      LOG.warn("Skipping unloadable location: {} ({})", location, e.getMessage());
+      return List.of();
+    }
   }
 }

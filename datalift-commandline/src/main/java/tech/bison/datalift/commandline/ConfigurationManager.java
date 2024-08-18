@@ -15,13 +15,22 @@ package tech.bison.datalift.commandline;
 
 import tech.bison.datalift.core.DataLift;
 import tech.bison.datalift.core.api.configuration.CommercetoolsProperties;
-import tech.bison.datalift.core.api.configuration.Configuration;
 import tech.bison.datalift.core.api.configuration.FluentConfiguration;
+import tech.bison.datalift.core.api.exception.DataLiftException;
+import tech.bison.datalift.core.internal.util.ClassUtils;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class ConfigurationManager {
 
+  public static final String DEFAULT_CLI_JARS_LOCATION = "jars";
+
   public FluentConfiguration getConfiguration(CommandLineArguments commandLineArguments) {
-    var fluentConfiguration =  DataLift.configure()
+    var installDir = ClassUtils.getInstallDir(Main.class);
+    var fluentConfiguration =  DataLift.configure(getClassLoaderWithJars(installDir))
         .withApiProperties(new CommercetoolsProperties(
             commandLineArguments.getClientId(),
             commandLineArguments.getClientSecret(),
@@ -43,5 +52,39 @@ public class ConfigurationManager {
 
   private String[] getLocations(String locations) {
     return locations.split(",");
+  }
+
+  private static ClassLoader getClassLoaderWithJars(String workingDirectory) {
+    List<String> jarDirs = new ArrayList<>();
+    File jarDir = new File(workingDirectory, DEFAULT_CLI_JARS_LOCATION);
+    if (jarDir.exists()) {
+      jarDirs.add(jarDir.getAbsolutePath());
+    }
+    ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+    List<File> jarFiles = new ArrayList<>(getJarFiles(jarDirs.toArray(new String[0])));
+    if (!jarFiles.isEmpty()) {
+      classLoader = ClassUtils.addJarsOrDirectoriesToClasspath(classLoader, jarFiles);
+    }
+    return classLoader;
+  }
+
+  private static List<File> getJarFiles(String[] dirs) {
+    if (dirs.length == 0) {
+      return Collections.emptyList();
+    }
+
+    List<File> jarFiles = new ArrayList<>();
+    for (String dirName : dirs) {
+      File dir = new File(dirName);
+      File[] files = dir.listFiles((dir1, name) -> name.endsWith(".jar"));
+
+      if (files == null) {
+        throw new DataLiftException("Directory for Data Migrations not found: " + dirName);
+      }
+
+      jarFiles.addAll(Arrays.asList(files));
+    }
+
+    return jarFiles;
   }
 }

@@ -61,11 +61,10 @@ class V1__MigrationWithJsonData extends BaseDataMigration {
 
 ## CLI based execution
 
-Instead of executing Datalift from within your application one can use the cli
+Instead of executing Datalift from within your application one can use the command line interface. The JAR-files containing the migrations classes must be located in a sub folder named *jars* right beside the bin folder of the installation folder.
 
 ```shell
-java -cp "lib/*;your-fat-jar.jar" tech.bison.datalift.commandline.Main 
-                --apiUrl=https://api.europe-west1.gcp.commercetools.com/ 
+bin/datalift-commandline --apiUrl=https://api.europe-west1.gcp.commercetools.com/ 
                 --authUrl=https://auth.europe-west1.gcp.commercetools.com/ 
                 --clientId=someClientId 
                 --clientSecret=someClientSecret 

@@ -13,23 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.bison.datalift.core.api.configuration;
-
-import com.commercetools.api.client.ProjectApiRoot;
-import java.util.List;
-import tech.bison.datalift.core.api.Location;
-
-public interface Configuration {
-
-  List<Location> getLocations();
-
-  ProjectApiRoot getApiRoot();
-
-  CommercetoolsProperties getApiProperties();
-
-  CommercetoolsProperties getImportApiProperties();
-
-  com.commercetools.importapi.client.ProjectApiRoot getImportApiRoot();
-
-  ClassLoader getClassLoader();
-}
+/**
+ * Private API. No compatibility guarantees provided.
+ */
+package tech.bison.datalift.core.internal.util;

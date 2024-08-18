@@ -61,12 +61,40 @@ public class DataLift {
     var objectMapper = new ObjectMapper()
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     this.versioner = new CustomObjectBasedVersioner(objectMapper);
-    this.migrationResolver = new ClasspathMigrationResolver(configuration.getLocations());
+    this.migrationResolver = new ClasspathMigrationResolver(configuration.getLocations(), configuration.getClassLoader());
     this.dataLiftExecutor = new DataLiftExecutor(versioner);
   }
 
+  /**
+   * This is your starting point. This creates a configuration which can be customized to your needs before being
+   * loaded into a new DataLift instance using the load() method.
+   *
+   * In its simplest form, this is how you configure DataLift with all defaults to get started:
+   * <pre>DataLift dataLift = DataLift.configure().withApiUrl(..).load();</pre>
+   *
+   * After that you have a fully-configured DataLift instance and you can call migrate()
+   *
+   * @return A new configuration from which DataLift can be loaded.
+   */
   public static FluentConfiguration configure() {
     return new FluentConfiguration();
+  }
+
+  /**
+   * This is your starting point. This creates a configuration which can be customized to your needs before being
+   * loaded into a new DataLift instance using the load() method.
+   *
+   * In its simplest form, this is how you configure DataLift with all defaults to get started:
+   * <pre>DataLift dataLift = DataLift.configure().withApiUrl(..).load();</pre>
+   *
+   * After that you have a fully-configured DataLift instance and you can call migrate()
+   *
+   * @param classLoader The class loader to use when loading data migration classes.
+   *
+   * @return A new configuration from which DataLift can be loaded.
+   */
+  public static FluentConfiguration configure(ClassLoader classLoader) {
+    return new FluentConfiguration(classLoader);
   }
 
   /**

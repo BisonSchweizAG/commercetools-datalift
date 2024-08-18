@@ -27,13 +27,23 @@ import tech.bison.datalift.core.api.exception.DataLiftException;
 
 public class FluentConfiguration implements Configuration {
 
+  private final ClassLoader classLoader;
   private List<String> locations;
   private ProjectApiRoot projectApiRoot;
   private CommercetoolsProperties apiProperties;
   private CommercetoolsProperties importApiProperties;
   private com.commercetools.importapi.client.ProjectApiRoot importApiRoot;
 
-  public FluentConfiguration() {
+
+  public FluentConfiguration(){
+    this(Thread.currentThread().getContextClassLoader());
+  }
+
+  /**
+   * @param classLoader The ClassLoader to use for loading migrations, resolvers, etc from the classpath. (default: Thread.currentThread().getContextClassLoader() )
+   */
+  public FluentConfiguration(ClassLoader classLoader) {
+    this.classLoader = classLoader;
     withLocations("data.migration");
   }
 
@@ -116,5 +126,10 @@ public class FluentConfiguration implements Configuration {
   @Override
   public List<Location> getLocations() {
     return locations.stream().map(Location::new).toList();
+  }
+
+  @Override
+  public ClassLoader getClassLoader() {
+    return classLoader;
   }
 }
