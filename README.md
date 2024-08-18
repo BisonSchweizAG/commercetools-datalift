@@ -41,12 +41,30 @@ DataLift dataLift = DataLift.configure()
         .execute();
 ```
 
+## JSON-based migrations
+
+To execute a migration with JSON data we can create a JSON file in the resources folder and refer to it in a normal Java migration. We can deserialize the file manually or use the helper method *readJsonFromResource()* from the base class *BaseDataMigration*:
+
+In the following example a CustomObjectDraft is read from a JSON-file and posted to the custom-objects endpoint:
+
+```java
+class V1__MigrationWithJsonData extends BaseDataMigration {
+
+    @Override
+    public void execute(Context context) {
+        var apiRoot = context.getProjectApiRoot();
+        CustomObjectDraft body = readJsonFromResource("data/migration/createMyCustomObject.json", CustomObjectDraft.class);
+        apiRoot.customObjects().post(body);
+    }
+}
+```
+
 ## CLI based execution
 
 Instead of executing Datalift from within your application one can use the cli
 
 ```shell
-java -cp "datalift-commandline.jar;your-fat-jar.jar" tech.bison.datalift.commandline.Main 
+java -cp "lib/*;your-fat-jar.jar" tech.bison.datalift.commandline.Main 
                 --apiUrl=https://api.europe-west1.gcp.commercetools.com/ 
                 --authUrl=https://auth.europe-west1.gcp.commercetools.com/ 
                 --clientId=someClientId 
@@ -60,10 +78,6 @@ There is a possibility to use alternative url to maven central:
 create gradle.properties and set for example:
 REPO1_URL=https://artifactory.example.com/repo1
 
-## How to contribute
-
-Coming soon.
-
 ## License
 
-Licensed under Apache 2.0 
+Datalift is published under the Apache License 2.0, see http://www.apache.org/licenses/LICENSE-2.0 for details.

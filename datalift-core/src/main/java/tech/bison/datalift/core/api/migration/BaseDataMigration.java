@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2000 - 2024 Bison Schweiz AG
+ * Copyright (C) 2024 Bison Schweiz AG
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package tech.bison.datalift.core.api.migration;
 
+import io.vrap.rmf.base.client.utils.json.JsonUtils;
 import tech.bison.datalift.core.api.exception.DataLiftException;
 import tech.bison.datalift.core.api.executor.Context;
 
@@ -59,6 +60,18 @@ public abstract class BaseDataMigration implements DataMigration {
             + " (could not recognise version number " + version + ")", e);
       }
     }
+  }
+
+  /**
+   * Reads a UTF-8 JSON text file from the classpath of the current thread and transforms it into a Java object.
+   *
+   * @param resourcePath the path to the resource. Example: If the file is located in "src/main/resources/data/migration/myCustomObject.json" then the path should be "data/migration/myCustomObject.json"
+   * @param clazz        the class of the result
+   * @param <T>          the type of the result
+   * @return the created objected
+   */
+  protected <T> T readJsonFromResource(String resourcePath, Class<T> clazz) {
+    return JsonUtils.readObjectFromResource(resourcePath, clazz);
   }
 
   @Override
