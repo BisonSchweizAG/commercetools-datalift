@@ -11,6 +11,8 @@ picocli = '4.7.0'
 mockserver = '5.15.0'
 slf4j = '2.0.13'
 logback = '1.5.6'
+vanniktech-maven-publish = '0.29.0'
+reckon = '0.18.3'
 
 [libraries]
 reflections = { module = "org.reflections:reflections", version.ref = "reflections" }
@@ -29,3 +31,7 @@ mockserver-client = { module = "org.mock-server:mockserver-client-java", version
 picocli = { module = "info.picocli:picocli", version.ref = "picocli" }
 slf4j = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
+
+[plugins]
+vanniktech-maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "vanniktech-maven-publish" }
+reckon = {id = "org.ajoberstar.reckon", version.ref = "reckon"}

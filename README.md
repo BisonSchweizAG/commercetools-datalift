@@ -54,7 +54,7 @@ class V1__MigrationWithJsonData extends BaseDataMigration {
 Instead of executing Datalift from within your application one can use the cli
 
 ```shell
-java -cp "datalift-commandline.jar;your-fat-jar.jar" tech.bison.datalift.commandline.Main 
+java -cp "lib/*;your-fat-jar.jar" tech.bison.datalift.commandline.Main 
                 --apiUrl=https://api.europe-west1.gcp.commercetools.com/ 
                 --authUrl=https://auth.europe-west1.gcp.commercetools.com/ 
                 --clientId=someClientId 
