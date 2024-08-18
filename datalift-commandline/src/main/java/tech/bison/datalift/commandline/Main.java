@@ -32,7 +32,7 @@ import tech.bison.datalift.core.api.exception.DataLiftException;
     name = "datalift",
     description = "executes datalift"
 )
-public class Main implements Runnable {
+public class Main implements Runnable, CommandLineArguments {
 
   private static final Logger LOG = LoggerFactory.getLogger(Main.class);
 
@@ -68,20 +68,61 @@ public class Main implements Runnable {
   public void run() {
     LOG.info("Now we would execute DataLift with [{}][{}}][{}}]", apiUrl, authUrl, projectKey);
     try {
-      var dataliftBuilder = DataLift.configure()
-          .withApiProperties(new CommercetoolsProperties(clientId, clientSecret, apiUrl, authUrl, projectKey))
-          .withImportApiProperties(new CommercetoolsProperties(importClientId, importClientSecret, importApiUrl, importAuthUrl, projectKey));
-      if (locations != null) {
-        dataliftBuilder.withLocations(getLocations());
-      }
-      dataliftBuilder.load().execute();
+      var dataLift = new ConfigurationManager().getConfiguration(this).load();
+      dataLift.execute();
     } catch (DataLiftException ex) {
       LOG.error("An error occurred while executing data migrations.", ex);
     }
     LOG.info("DataLift end");
   }
 
-  private String[] getLocations() {
-    return locations.split(",");
+  @Override
+  public String getLocations() {
+    return locations;
+  }
+
+  @Override
+  public String getClientId() {
+    return clientId;
+  }
+
+  @Override
+  public String getClientSecret() {
+    return clientSecret;
+  }
+
+  @Override
+  public String getApiUrl() {
+    return apiUrl;
+  }
+
+  @Override
+  public String getAuthUrl() {
+    return authUrl;
+  }
+
+  @Override
+  public String getImportClientId() {
+    return importClientId;
+  }
+
+  @Override
+  public String getImportClientSecret() {
+    return importClientSecret;
+  }
+
+  @Override
+  public String getImportApiUrl() {
+    return importApiUrl;
+  }
+
+  @Override
+  public String getImportAuthUrl() {
+    return importAuthUrl;
+  }
+
+  @Override
+  public String getProjectKey() {
+    return projectKey;
   }
 }
