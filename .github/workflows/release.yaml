@@ -39,7 +39,8 @@ jobs:
 
       - name: Release
         run: |
-          ./gradlew datalift-commandline:publish --no-configuration-cache
+          ./gradlew datalift-commandline:clean
+          ./gradlew datalift-commandline:publish
           ./gradlew datalift-commandline:jreleaserFullRelease
         env:
           # Define secrets at https://github.com/BisonSchweizAG/datalift/settings
