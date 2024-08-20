@@ -40,7 +40,7 @@ jobs:
       - name: Release
         run: ./gradlew publish --no-configuration-cache
         env:
-          # Define secrets at https://github.com/BisonSchweizAG/datalift/settings
+          # Define secrets at https://github.com/BisonSchweizAG/commercetools-datalift/settings
           # ------------------------------------------------------------------------------
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_USER }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.SONATYPE_PASSWORD }}

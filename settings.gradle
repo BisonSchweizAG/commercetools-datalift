@@ -1,4 +1,4 @@
-rootProject.name = 'datalift'
+rootProject.name = 'commercetools-datalift'
 
 
 include 'datalift-core', 'datalift-commandline'

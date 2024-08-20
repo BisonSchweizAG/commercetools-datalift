@@ -12,13 +12,13 @@ application {
 mavenPublishing {
   publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, true)
   signAllPublications()
-  coordinates("io.github.studix", "datalift-commandline", "${project.version}")
+  coordinates("io.github.studix", "commercetools-datalift-commandline", "${project.version}")
 
   pom {
-    name = "Datalift CLI"
-    description = "Command line interface for Datalift."
+    name = "commercetools Datalift command line interface"
+    description = "Command line interface for commercetools Datalift."
     inceptionYear = "2024"
-    url = "https://github.com/BisonSchweizAG/datalift"
+    url = "https://github.com/BisonSchweizAG/commercetools-datalift"
     licenses {
       license {
         name = "The Apache License, Version 2.0"
@@ -34,9 +34,9 @@ mavenPublishing {
       }
     }
     scm {
-      url = "https://github.com/BisonSchweizAG/datalift"
-      connection = "scm:git:git://github.com/BisonSchweizAG/datalift.git"
-      developerConnection = "scm:git:ssh://git@github.com/BisonSchweizAG/datalift.git"
+      url = "https://github.com/BisonSchweizAG/commercetools-datalift"
+      connection = "scm:git:git://github.com/BisonSchweizAG/commercetools-datalift.git"
+      developerConnection = "scm:git:ssh://git@github.com/BisonSchweizAG/commercetools-datalift.git"
     }
   }
 }

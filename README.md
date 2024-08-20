@@ -1,10 +1,16 @@
-# Datalift
+# commercetools Datalift
 
-Datalift is a tool that let you automate your data migrations of your commercetools based e-commerce application. Develop data migrations inside your project and run them at deployment time with datalift.
+commercetools Datalift is a data migration tool for commercetools. Develop data migrations inside your project and run them at deployment time with commercetools Datalift.
 
 ## Setup
 
-Add the latest Datalift dependency to your project.
+Add the latest commercetools-datalift-core dependency to your project.
+
+```groovy
+implementation "io.github.studix:commercetools-datalift-core:x.y.z"
+```
+
+(latest version numbers avaible on [Maven Central](https://central.sonatype.com/search?namespace=io.github.studix&name=commercetools-datalift-core))
 
 ## Getting Started
 
@@ -32,7 +38,7 @@ class V1__Data_Migration_with_description extends BaseDataMigration {
 
 We use the commercetools project api root object in the migration above to perform the migration logic.
 
-Now let's configure Datalift using the Datalift root object and execute the migration
+Now let's configure commercetools Datalift using the Datalift root object and execute the migration
 
 ```java
 DataLift dataLift = DataLift.configure()

@@ -27,13 +27,13 @@ dependencies {
 mavenPublishing {
   publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, true)
   signAllPublications()
-  coordinates("io.github.studix", "datalift-core", "${project.version}")
+  coordinates("io.github.studix", "commercetools-datalift-core", "${project.version}")
 
   pom {
-    name = "Datalift Core"
-    description = "Datalift is a tool to automate data migrations for commercetools based applications."
+    name = "commercetools Datalift Core"
+    description = "commercetools Datalift is a data migration tool for commercetools."
     inceptionYear = "2024"
-    url = "https://github.com/BisonSchweizAG/datalift"
+    url = "https://github.com/BisonSchweizAG/commercetools-datalift"
     licenses {
       license {
         name = "The Apache License, Version 2.0"
@@ -49,9 +49,9 @@ mavenPublishing {
       }
     }
     scm {
-      url = "https://github.com/BisonSchweizAG/datalift"
-      connection = "scm:git:git://github.com/BisonSchweizAG/datalift.git"
-      developerConnection = "scm:git:ssh://git@github.com/BisonSchweizAG/datalift.git"
+      url = "https://github.com/BisonSchweizAG/commercetools-datalift"
+      connection = "scm:git:git://github.com/BisonSchweizAG/commercetools-datalift.git"
+      developerConnection = "scm:git:ssh://git@github.com/BisonSchweizAG/commercetools-datalift.git"
     }
   }
 }
