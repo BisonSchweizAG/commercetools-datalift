@@ -1,6 +1,6 @@
 # commercetools Datalift
 
-commercetools Datalift is a data migration tool for commercetools. Develop data migrations inside your project and run them at deployment time with commercetools Datalift.
+commercetools Datalift is a data migration tool for commercetools. Develop data migrations inside your project and run them at deployment time with commercetools Datalift. The project is inspired by [FlywayDB](https://flywaydb.org) which solves the problem for relational databases.
 
 ## Setup
 
