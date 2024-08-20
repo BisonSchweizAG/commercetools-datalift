@@ -15,7 +15,6 @@ java {
 
 jreleaser {
   project {
-    version = "${project.version}"
     gitRootSearch = true
     description = 'Command line interface for Datalift.'
     authors = ['BisonSchweizAG']
