@@ -12,7 +12,7 @@ application {
 mavenPublishing {
   publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, true)
   signAllPublications()
-  coordinates("io.github.studix", "commercetools-datalift-commandline", "${project.version}")
+  coordinates("tech.bison", "commercetools-datalift-commandline", "${project.version}")
 
   pom {
     name = "commercetools Datalift command line interface"
