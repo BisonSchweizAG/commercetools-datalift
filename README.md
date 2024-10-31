@@ -7,10 +7,10 @@ commercetools Datalift is a data migration tool for commercetools. Develop data 
 Add the latest commercetools-datalift-core dependency to your project.
 
 ```groovy
-implementation "io.github.studix:commercetools-datalift-core:x.y.z"
+implementation "tech.bison:commercetools-datalift-core:x.y.z"
 ```
 
-(latest version numbers avaible on [Maven Central](https://central.sonatype.com/search?namespace=io.github.studix&name=commercetools-datalift-core))
+(latest version numbers avaible on [Maven Central](https://central.sonatype.com/search?namespace=tech.bison&name=commercetools-datalift-core))
 
 ## Getting Started
 
