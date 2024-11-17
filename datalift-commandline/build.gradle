@@ -39,19 +39,6 @@ mavenPublishing {
       developerConnection = "scm:git:ssh://git@github.com/BisonSchweizAG/commercetools-datalift.git"
     }
   }
-
-  afterEvaluate {
-    publishing {
-      publications {
-        maven(MavenPublication) {
-          artifact(tasks.distTar) {
-            classifier = "bin"
-            extension = "tar.gz"
-          }
-        }
-      }
-    }
-  }
 }
 
 dependencies {
