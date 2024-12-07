@@ -11,7 +11,7 @@ mockserver = '5.15.0'
 slf4j = '2.0.13'
 logback = '1.5.6'
 vanniktech-maven-publish = '0.29.0'
-reckon = '0.18.3'
+reckon = '0.19.1'
 guava = '33.3.0-jre'
 jreleaser = '1.13.1'
 
