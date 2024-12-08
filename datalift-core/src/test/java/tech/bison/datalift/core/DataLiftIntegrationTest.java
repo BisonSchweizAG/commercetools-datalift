@@ -25,7 +25,7 @@ import tech.bison.datalift.core.api.versioner.Versioner;
 import tech.bison.datalift.core.internal.versioner.CustomObjectBasedVersioner;
 
 @Testcontainers
-class DataLiftIT {
+class DataLiftIntegrationTest {
 
   public static final DockerImageName MOCKSERVER_IMAGE = DockerImageName
       .parse("mockserver/mockserver")

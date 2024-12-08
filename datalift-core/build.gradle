@@ -60,18 +60,5 @@ test {
   testLogging {
     events "PASSED", "SKIPPED", "FAILED", "STANDARD_OUT", "STANDARD_ERROR"
   }
-  useJUnitPlatform() {
-    filter {
-      includeTestsMatching "*Test"
-      excludeTestsMatching "*IT"
-    }
-  }
-}
-
-tasks.register("integrationTest", Test) {
-  useJUnitPlatform {
-    filter {
-      includeTestsMatching '*IT'
-    }
-  }
+  useJUnitPlatform()
 }
