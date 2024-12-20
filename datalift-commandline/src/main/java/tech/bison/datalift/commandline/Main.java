@@ -24,8 +24,6 @@ import org.slf4j.LoggerFactory;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
-import tech.bison.datalift.core.DataLift;
-import tech.bison.datalift.core.api.configuration.CommercetoolsProperties;
 import tech.bison.datalift.core.api.exception.DataLiftException;
 
 @Command(
@@ -36,28 +34,27 @@ public class Main implements Runnable, CommandLineArguments {
 
   private static final Logger LOG = LoggerFactory.getLogger(Main.class);
 
-  @Option(names = {"--clientId"}, required = true)
-  private String clientId;
-  @Option(names = {"--clientSecret"}, required = true)
-  private String clientSecret;
-  @Option(names = {"--apiUrl"}, required = true)
-  private String apiUrl;
-  @Option(names = {"--authUrl"}, required = true)
-  private String authUrl;
-  @Option(names = {"--importClientId"})
-  private String importClientId;
-  @Option(names = {"--importClientSecret"})
-  private String importClientSecret;
-  @Option(names = {"--importApiUrl"})
-  private String importApiUrl;
-  @Option(names = {"--importAuthUrl"})
-  private String importAuthUrl;
-  @Option(names = {"--projectKey"}, required = true)
+  @Option(names = {"--projectKey"}, required = true, description = "commercetools project key, or environment variable DATALIFT_PROJECT_KEY", defaultValue = "${env:DATALIFT_PROJECT_KEY}")
   private String projectKey;
-  @Option(names = {"--locations"}, required = false, description = "A comma seperated list of packages to scan")
+  @Option(names = {"--apiUrl"}, required = true, description = "commercetools api url, or environment variable DATALIFT_API_URL", defaultValue = "${env:DATALIFT_API_URL}")
+  private String apiUrl;
+  @Option(names = {"--authUrl"}, required = true, description = "commercetools auth url, or environment variable DATALIFT_AUTH_URL", defaultValue = "${env:DATALIFT_AUTH_URL}")
+  private String authUrl;
+  @Option(names = {"--clientId"}, required = true, description = "commercetools client id, or environment variable DATALIFT_CLIENT_ID", defaultValue = "${env:DATALIFT_CLIENT_ID}")
+  private String clientId;
+  @Option(names = {"--clientSecret"}, required = true, description = "commercetools client secret, or environment variable DATALIFT_CLIENT_SECRET", defaultValue = "${env:DATALIFT_CLIENT_SECRET}")
+  private String clientSecret;
+  @Option(names = {"--importClientId"}, description = "commercetools import api client id, or environment variable DATALIFT_IMPORT_CLIENT_ID", defaultValue = "${env:DATALIFT_IMPORT_CLIENT_ID}")
+  private String importClientId;
+  @Option(names = {"--importClientSecret"}, description = "commercetools import api client secret, or environment variable DATALIFT_IMPORT_CLIENT_SECRET", defaultValue = "${env:DATALIFT_IMPORT_CLIENT_SECRET}")
+  private String importClientSecret;
+  @Option(names = {"--importApiUrl"}, description = "commercetools import api url, or environment variable DATALIFT_IMPORT_CLIENT_SECRET", defaultValue = "${env:DATALIFT_IMPORT_CLIENT_SECRET}")
+  private String importApiUrl;
+  @Option(names = {"--importAuthUrl"}, description = "commercetools import api auth url, or environment variable DATALIFT_IMPORT_AUTH_URL", defaultValue = "${env:DATALIFT_IMPORT_AUTH_URL}")
+  private String importAuthUrl;
+  @Option(names = {"--locations"}, description = "A comma seperated list of packages to scan")
   private String locations;
-
-
+  
   public static void main(String[] args) {
     CommandLine cmd = new CommandLine(new Main());
     int exitCode = cmd.execute(args);

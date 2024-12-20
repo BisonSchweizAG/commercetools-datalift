@@ -39,13 +39,15 @@ public class ConfigurationManager {
             commandLineArguments.getClientSecret(),
             commandLineArguments.getApiUrl(),
             commandLineArguments.getAuthUrl(),
-            commandLineArguments.getProjectKey()))
-        .withImportApiProperties(new CommercetoolsProperties(
-            commandLineArguments.getImportClientId(),
-            commandLineArguments.getImportClientSecret(),
-            commandLineArguments.getImportApiUrl(),
-            commandLineArguments.getImportAuthUrl(),
             commandLineArguments.getProjectKey()));
+    if (commandLineArguments.getImportApiUrl() != null && !commandLineArguments.getImportApiUrl().isBlank()) {
+      fluentConfiguration = fluentConfiguration.withImportApiProperties(new CommercetoolsProperties(
+          commandLineArguments.getImportClientId(),
+          commandLineArguments.getImportClientSecret(),
+          commandLineArguments.getImportApiUrl(),
+          commandLineArguments.getImportAuthUrl(),
+          commandLineArguments.getProjectKey()));
+    }
 
     if (commandLineArguments.getLocations() != null) {
       fluentConfiguration.withLocations(getLocations(commandLineArguments.getLocations()));

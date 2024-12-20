@@ -1,14 +1,12 @@
 package tech.bison.datalift.commandline;
 
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import tech.bison.datalift.core.api.configuration.CommercetoolsProperties;
-
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import org.junit.jupiter.api.Test;
+import tech.bison.datalift.core.api.configuration.CommercetoolsProperties;
 
 class ConfigurationManagerTest {
 
@@ -51,6 +49,33 @@ class ConfigurationManagerTest {
     assertEquals(2, configuration.getLocations().size());
     assertEquals("location1", configuration.getLocations().get(0).path());
     assertEquals("location2", configuration.getLocations().get(1).path());
+  }
+
+  @Test
+  void getConfiguration_importApiUrlNull_returnConfiguration() {
+    var commandLineArguments = mock(CommandLineArguments.class);
+    when(commandLineArguments.getApiUrl()).thenReturn("apiUrl");
+    when(commandLineArguments.getAuthUrl()).thenReturn("authUrl");
+    when(commandLineArguments.getClientId()).thenReturn("clientId");
+    when(commandLineArguments.getClientSecret()).thenReturn("clientSecret");
+
+    var configuration = createConfigurationManager().getConfiguration(commandLineArguments);
+
+    assertNull(configuration.getImportApiProperties());
+  }
+
+  @Test
+  void getConfiguration_importApiUrlEmpty_returnConfiguration() {
+    var commandLineArguments = mock(CommandLineArguments.class);
+    when(commandLineArguments.getApiUrl()).thenReturn("apiUrl");
+    when(commandLineArguments.getAuthUrl()).thenReturn("authUrl");
+    when(commandLineArguments.getClientId()).thenReturn("clientId");
+    when(commandLineArguments.getClientSecret()).thenReturn("clientSecret");
+    when(commandLineArguments.getImportApiUrl()).thenReturn("");
+
+    var configuration = createConfigurationManager().getConfiguration(commandLineArguments);
+
+    assertNull(configuration.getImportApiProperties());
   }
 
   private void assertImportApiProperties(CommercetoolsProperties properties) {
