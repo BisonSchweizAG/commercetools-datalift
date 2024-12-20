@@ -71,7 +71,7 @@ public abstract class BaseDataMigration implements DataMigration {
    * @return the created objected
    */
   protected <T> T readJsonFromResource(String resourcePath, Class<T> clazz) {
-    return JsonUtils.readObjectFromResource(resourcePath, clazz);
+    return JsonUtils.fromInputStream(getClass().getResourceAsStream(resourcePath), clazz);
   }
 
   @Override
