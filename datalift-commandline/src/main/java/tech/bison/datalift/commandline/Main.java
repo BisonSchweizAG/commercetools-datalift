@@ -54,7 +54,7 @@ public class Main implements Runnable, CommandLineArguments {
   private String importAuthUrl;
   @Option(names = {"--locations"}, description = "A comma seperated list of packages to scan")
   private String locations;
-  
+
   public static void main(String[] args) {
     CommandLine cmd = new CommandLine(new Main());
     int exitCode = cmd.execute(args);
@@ -63,7 +63,7 @@ public class Main implements Runnable, CommandLineArguments {
 
   @Override
   public void run() {
-    LOG.info("Now we would execute DataLift with [{}][{}}][{}}]", apiUrl, authUrl, projectKey);
+    LOG.info("Now we would execute DataLift with [{}][{}][{}]", apiUrl, authUrl, projectKey);
     try {
       var dataLift = new ConfigurationManager().getConfiguration(this).load();
       dataLift.execute();
