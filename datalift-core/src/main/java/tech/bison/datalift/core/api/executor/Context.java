@@ -50,7 +50,7 @@ public class Context {
     if (configuration.getImportApiProperties() == null) {
       throw new DataLiftException("Missing commercetools import api properties.");
     }
-    return createImportProjectApiRoot(configuration.getApiProperties());
+    return createImportProjectApiRoot(configuration.getImportApiProperties());
   }
 
   private ProjectApiRoot createProjectApiRoot(CommercetoolsProperties properties) {
