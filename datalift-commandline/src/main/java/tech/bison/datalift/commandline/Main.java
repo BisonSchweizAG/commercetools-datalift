@@ -44,14 +44,14 @@ public class Main implements Runnable, CommandLineArguments {
   private String clientId;
   @Option(names = {"--clientSecret"}, required = true, description = "commercetools client secret, or environment variable DATALIFT_CLIENT_SECRET", defaultValue = "${env:DATALIFT_CLIENT_SECRET}")
   private String clientSecret;
+  @Option(names = {"--importApiUrl"}, description = "commercetools import api url, or environment variable DATALIFT_IMPORT_API_URL", defaultValue = "${env:DATALIFT_IMPORT_API_URL}")
+  private String importApiUrl;
+  @Option(names = {"--importAuthUrl"}, description = "commercetools import api auth url, or environment variable DATALIFT_IMPORT_AUTH_URL", defaultValue = "${env:DATALIFT_IMPORT_AUTH_URL}")
+  private String importAuthUrl;
   @Option(names = {"--importClientId"}, description = "commercetools import api client id, or environment variable DATALIFT_IMPORT_CLIENT_ID", defaultValue = "${env:DATALIFT_IMPORT_CLIENT_ID}")
   private String importClientId;
   @Option(names = {"--importClientSecret"}, description = "commercetools import api client secret, or environment variable DATALIFT_IMPORT_CLIENT_SECRET", defaultValue = "${env:DATALIFT_IMPORT_CLIENT_SECRET}")
   private String importClientSecret;
-  @Option(names = {"--importApiUrl"}, description = "commercetools import api url, or environment variable DATALIFT_IMPORT_CLIENT_SECRET", defaultValue = "${env:DATALIFT_IMPORT_CLIENT_SECRET}")
-  private String importApiUrl;
-  @Option(names = {"--importAuthUrl"}, description = "commercetools import api auth url, or environment variable DATALIFT_IMPORT_AUTH_URL", defaultValue = "${env:DATALIFT_IMPORT_AUTH_URL}")
-  private String importAuthUrl;
   @Option(names = {"--locations"}, description = "A comma seperated list of packages to scan")
   private String locations;
 
