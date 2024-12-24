@@ -23,6 +23,7 @@ import static org.mockito.Mockito.when;
 import com.commercetools.importapi.client.ProjectApiRoot;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import tech.bison.datalift.core.api.configuration.CommercetoolsProperties;
 import tech.bison.datalift.core.api.configuration.FluentConfiguration;
@@ -32,7 +33,7 @@ import tech.bison.datalift.core.api.exception.DataLiftException;
 class ContextTest {
 
   @Test
-  void getImportApiRoot_importApiPropertiesExists_createImportApiRoot() {
+  void getImportApiRoot_allImportApiPropertiesExists_createImportApiRoot() {
     var importProperties = mock(CommercetoolsProperties.class);
     when(importProperties.apiUrl()).thenReturn("http://someapi.com");
     when(importProperties.authUrl()).thenReturn("http://auth.someapi.com");
@@ -45,10 +46,33 @@ class ContextTest {
 
     assertNotNull(context.getImportProjectApiRoot());
     verify(importProperties).apiUrl();
-    verify(importProperties).authUrl();
-    verify(importProperties).clientId();
-    verify(importProperties).clientSecret();
-    verify(importProperties).projectKey();
+    verify(importProperties, Mockito.times(2)).authUrl();
+    verify(importProperties, Mockito.times(2)).clientId();
+    verify(importProperties, Mockito.times(2)).clientSecret();
+    verify(importProperties, Mockito.times(2)).projectKey();
+  }
+
+  @Test
+  void getImportApiRoot_requiredImportApiPropertiesExists_createImportApiRoot() {
+    var importProperties = mock(CommercetoolsProperties.class);
+    when(importProperties.apiUrl()).thenReturn("http://imp.someapi.com");
+
+    var apiProperties = mock(CommercetoolsProperties.class);
+    when(apiProperties.apiUrl()).thenReturn("http://someapi.com");
+    when(apiProperties.authUrl()).thenReturn("http://auth.someapi.com");
+    when(apiProperties.clientId()).thenReturn("clientId");
+    when(apiProperties.clientSecret()).thenReturn("clientSecret");
+    when(apiProperties.projectKey()).thenReturn("projectKey");
+    FluentConfiguration configuration = createConfiguration(apiProperties)
+        .withImportApiProperties(importProperties);
+    var context = new Context(configuration);
+
+    assertNotNull(context.getImportProjectApiRoot());
+    verify(importProperties).apiUrl();
+    verify(apiProperties).authUrl();
+    verify(apiProperties).clientId();
+    verify(apiProperties).clientSecret();
+    verify(apiProperties).projectKey();
   }
 
   @Test
@@ -69,8 +93,12 @@ class ContextTest {
   }
 
   private static FluentConfiguration createConfiguration() {
+    return createConfiguration(new CommercetoolsProperties("clientId", "clientSecret", "aApiUr",
+        "authUrl", "projectKey"));
+  }
+
+  private static FluentConfiguration createConfiguration(CommercetoolsProperties apiProperties) {
     return new FluentConfiguration()
-        .withApiProperties(new CommercetoolsProperties("clientId", "clientSecret", "aApiUr",
-            "authUrl", "projectKey"));
+        .withApiProperties(apiProperties);
   }
 }

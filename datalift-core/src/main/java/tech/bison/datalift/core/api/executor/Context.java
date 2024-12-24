@@ -17,6 +17,7 @@ package tech.bison.datalift.core.api.executor;
 
 import com.commercetools.api.client.ProjectApiRoot;
 import com.commercetools.api.defaultconfig.ApiRootBuilder;
+import com.google.common.base.Strings;
 import io.vrap.rmf.base.client.oauth2.ClientCredentials;
 import tech.bison.datalift.core.api.configuration.CommercetoolsProperties;
 import tech.bison.datalift.core.api.configuration.Configuration;
@@ -50,7 +51,7 @@ public class Context {
     if (configuration.getImportApiProperties() == null) {
       throw new DataLiftException("Missing commercetools import api properties.");
     }
-    return createImportProjectApiRoot(configuration.getImportApiProperties());
+    return createImportProjectApiRoot(configuration.getImportApiProperties(), configuration.getApiProperties());
   }
 
   private ProjectApiRoot createProjectApiRoot(CommercetoolsProperties properties) {
@@ -62,12 +63,13 @@ public class Context {
         .build(properties.projectKey());
   }
 
-  private com.commercetools.importapi.client.ProjectApiRoot createImportProjectApiRoot(CommercetoolsProperties properties) {
+  private com.commercetools.importapi.client.ProjectApiRoot createImportProjectApiRoot(CommercetoolsProperties importProperties, CommercetoolsProperties apiProperties) {
     return com.commercetools.importapi.defaultconfig.ImportApiRootBuilder.of().defaultClient(
-            ClientCredentials.of().withClientId(properties.clientId())
-                .withClientSecret(properties.clientSecret())
+            ClientCredentials.of().withClientId(Strings.isNullOrEmpty(importProperties.clientId()) ? apiProperties.clientId() : importProperties.clientId())
+                .withClientSecret(Strings.isNullOrEmpty(importProperties.clientSecret()) ? apiProperties.clientSecret() : importProperties.clientSecret())
                 .build(),
-            properties.authUrl(), properties.apiUrl())
-        .build(properties.projectKey());
+            Strings.isNullOrEmpty(importProperties.authUrl()) ? apiProperties.authUrl() : importProperties.authUrl(),
+            importProperties.apiUrl())
+        .build(Strings.isNullOrEmpty(importProperties.projectKey()) ? apiProperties.projectKey() : importProperties.projectKey());
   }
 }
