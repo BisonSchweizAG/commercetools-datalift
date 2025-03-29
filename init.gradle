@@ -1,0 +1,28 @@
+import org.cyclonedx.model.*;
+
+initscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+  dependencies {
+    classpath "org.cyclonedx:cyclonedx-gradle-plugin:2.2.0"
+  }
+}
+
+allprojects {
+  apply plugin: org.cyclonedx.gradle.CycloneDxPlugin
+  cyclonedxBom {
+    includeConfigs = ["runtimeClasspath"]
+    // declaration of the Object from OrganizationalContact
+    OrganizationalContact organizationalContact = new OrganizationalContact()
+
+    // passing Data to the plugin
+    organizationalEntity { oe ->
+      oe.name = 'Bison Schweiz AG'
+      oe.url = ['www.bison-group.com']
+      oe.addContact(organizationalContact)
+    }
+  }
+}

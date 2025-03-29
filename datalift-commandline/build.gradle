@@ -48,6 +48,10 @@ mavenPublishing {
             classifier = "bin"
             extension = "tar.gz"
           }
+          artifact(file("$buildDir/reports/bom.json")) {
+            classifier = "sbom"
+            extension = "json"
+          }
         }
       }
     }
