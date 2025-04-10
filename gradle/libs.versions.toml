@@ -11,7 +11,7 @@ slf4j = '2.0.17'
 logback = '1.5.18'
 vanniktech-maven-publish = '0.31.0'
 reckon = '0.19.1'
-guava = '33.4.6-jre'
+guava = '33.4.7-jre'
 
 [libraries]
 commercetools-java-importapi = { module = "com.commercetools.sdk:commercetools-sdk-java-importapi", version.ref = "commercetools" }
