@@ -13,11 +13,34 @@
 
 package tech.bison.datalift.core.api.migration;
 
+import java.util.Objects;
+
 public class TestPayload {
+
+  private TestPayload() {
+  }
+
+  public TestPayload(String key) {
+    this.key = key;
+  }
 
   private String key;
 
   public String getKey() {
     return key;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    TestPayload that = (TestPayload) o;
+    return Objects.equals(key, that.key);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(key);
   }
 }

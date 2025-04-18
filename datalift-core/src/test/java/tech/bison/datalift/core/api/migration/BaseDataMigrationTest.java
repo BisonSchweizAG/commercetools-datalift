@@ -62,9 +62,7 @@ class BaseDataMigrationTest {
     Thread.currentThread().setContextClassLoader(classLoaderMock);
     try {
       var payloadList = new V1__Data_Migration_with_description().readJsonFromResourceFolderPublicize("/jsonFilesInRoot", TestPayload.class);
-      assertThat(payloadList).hasSize(2);
-      assertEquals("someKey1", payloadList.getFirst().getKey());
-      assertEquals("someKey2", payloadList.getLast().getKey());
+      assertThat(payloadList).containsExactlyInAnyOrder(new TestPayload("someKey1"), new TestPayload("someKey2"));
       verifyNoInteractions(classLoaderMock);
     } finally {
       Thread.currentThread().setContextClassLoader(classLoaderSaved);
@@ -78,9 +76,7 @@ class BaseDataMigrationTest {
     Thread.currentThread().setContextClassLoader(classLoaderMock);
     try {
       var payloadList = new V1__Data_Migration_with_description().readJsonFromResourceFolderPublicize("jsonFiles", TestPayload.class);
-      assertThat(payloadList).hasSize(2);
-      assertEquals("someKey1", payloadList.getFirst().getKey());
-      assertEquals("someKey2", payloadList.getLast().getKey());
+      assertThat(payloadList).containsExactlyInAnyOrder(new TestPayload("someKey1"), new TestPayload("someKey2"));
       verifyNoInteractions(classLoaderMock);
     } finally {
       Thread.currentThread().setContextClassLoader(classLoaderSaved);
