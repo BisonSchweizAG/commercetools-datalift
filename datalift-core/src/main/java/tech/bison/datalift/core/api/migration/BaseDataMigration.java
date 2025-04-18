@@ -16,8 +16,10 @@
 package tech.bison.datalift.core.api.migration;
 
 import io.vrap.rmf.base.client.utils.json.JsonUtils;
+import java.util.List;
 import tech.bison.datalift.core.api.exception.DataLiftException;
 import tech.bison.datalift.core.api.executor.Context;
+import tech.bison.datalift.core.internal.util.ResourceUtils;
 
 public abstract class BaseDataMigration implements DataMigration {
 
@@ -64,14 +66,35 @@ public abstract class BaseDataMigration implements DataMigration {
 
   /**
    * Reads a UTF-8 JSON text file from the classpath of the current thread and transforms it into a Java object.
+   * <p>
+   * An absolute resource name is constructed from the given resource name using the same algorithm as Class.getResourceAsStream()
    *
-   * @param resourcePath the path to the resource. Example: If the file is located in "src/main/resources/data/migration/myCustomObject.json" then the path should be "data/migration/myCustomObject.json"
-   * @param clazz        the class of the result
-   * @param <T>          the type of the result
+   * @param name  the name of the resource.
+   *              <p>
+   *              Example: If the data migration class file is located in a package data.migration and the file is located under "src/main/resources/data/migration/myCustomObject.json" then the path should be "myCustomObject.json"
+   * @param clazz the class of the result
+   * @param <T>   the type of the result
    * @return the created objected
    */
-  protected <T> T readJsonFromResource(String resourcePath, Class<T> clazz) {
-    return JsonUtils.fromInputStream(getClass().getResourceAsStream(resourcePath), clazz);
+  protected <T> T readJsonFromResource(String name, Class<T> clazz) {
+    return JsonUtils.fromInputStream(getClass().getResourceAsStream(name), clazz);
+  }
+
+  /**
+   * Reads all UTF-8 JSON text files from a folder of the classpath of the current thread and transforms it into a Java object.
+   * <p>
+   *
+   * @param resourceFolderPath the path to the resource. The path can be relative to the data migration package or an absolute path.
+   *                           <p>
+   *                           Example: If the data migration class file is located in a package data.migration and the folder is located in "src/main/resources/data/migration/jsonFiles" then the path should be "jsonFiles"
+   * @param clazz              the class of the result
+   * @param <T>                the type of the result
+   * @return the created objected
+   */
+  protected <T> List<T> readJsonFromResourceFolder(String resourceFolderPath, Class<T> clazz) {
+    return ResourceUtils.getResourceInfos(resourceFolderPath, getClass()).stream()
+        .map(resource -> JsonUtils.fromJsonByteArray(resource, clazz))
+        .toList();
   }
 
   @Override
