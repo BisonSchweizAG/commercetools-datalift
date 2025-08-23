@@ -41,7 +41,7 @@ jobs:
         run: ./gradlew --init-script init.gradle cyclonedxBom
 
       - name: Release
-        run: ./gradlew publish --no-configuration-cache
+        run: ./gradlew publishAndReleaseToMavenCentral --no-configuration-cache
         env:
           # Define secrets at https://github.com/BisonSchweizAG/commercetools-datalift/settings
           # ------------------------------------------------------------------------------
