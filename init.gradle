@@ -14,7 +14,7 @@ initscript {
 
 allprojects {
   apply plugin: CyclonedxPlugin
-  cyclonedxBom {
+  cyclonedxDirectBom {
     includeConfigs = ["runtimeClasspath"]
     // declaration of the Object from OrganizationalContact
     OrganizationalContact organizationalContact = new OrganizationalContact()
