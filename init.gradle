@@ -1,3 +1,4 @@
+import org.cyclonedx.gradle.CyclonedxPlugin;
 import org.cyclonedx.model.*;
 
 initscript {
@@ -12,7 +13,7 @@ initscript {
 }
 
 allprojects {
-  apply plugin: org.cyclonedx.gradle.CycloneDxPlugin
+  apply plugin: CyclonedxPlugin
   cyclonedxBom {
     includeConfigs = ["runtimeClasspath"]
     // declaration of the Object from OrganizationalContact
