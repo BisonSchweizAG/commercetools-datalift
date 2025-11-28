@@ -14,16 +14,16 @@ initscript {
 
 allprojects {
   apply plugin: CyclonedxPlugin
-  cyclonedxBom {
+  cyclonedxDirectBom {
     includeConfigs = ["runtimeClasspath"]
-    // declaration of the Object from OrganizationalContact
-    OrganizationalContact organizationalContact = new OrganizationalContact()
 
-    // passing Data to the plugin
-    organizationalEntity { oe ->
-      oe.name = 'Bison Schweiz AG'
-      oe.url = ['www.bison-group.com']
-      oe.addContact(organizationalContact)
-    }
+    def contact = new OrganizationalContact()
+    contact.name = "Bison Schweiz AG"
+
+    def entity = new OrganizationalEntity()
+    entity.name = "Bison Schweiz AG"
+    entity.addContact(contact)
+
+    organizationalEntity = entity
   }
 }
