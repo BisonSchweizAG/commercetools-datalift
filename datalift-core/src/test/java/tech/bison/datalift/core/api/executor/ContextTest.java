@@ -59,7 +59,6 @@ class ContextTest {
     when(importProperties.apiUrl()).thenReturn("http://imp.someapi.com");
 
     var apiProperties = mock(CommercetoolsProperties.class);
-    when(apiProperties.apiUrl()).thenReturn("http://someapi.com");
     when(apiProperties.authUrl()).thenReturn("http://auth.someapi.com");
     when(apiProperties.clientId()).thenReturn("clientId");
     when(apiProperties.clientSecret()).thenReturn("clientSecret");
