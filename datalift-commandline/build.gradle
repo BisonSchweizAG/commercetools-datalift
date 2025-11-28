@@ -1,10 +1,25 @@
+import org.cyclonedx.model.*;
+
 plugins {
   alias(libs.plugins.vanniktech.maven.publish)
+  alias(libs.plugins.cyclonedx.bom)
   id 'application'
 }
 
 application {
   mainClass = 'tech.bison.datalift.commandline.Main'
+}
+
+tasks.cyclonedxDirectBom {
+  includeConfigs = ["runtimeClasspath"]
+  def contact = new OrganizationalContact()
+  contact.name = "Bison Schweiz AG"
+
+  def entity = new OrganizationalEntity()
+  entity.name = "Bison Schweiz AG"
+  entity.addContact(contact)
+
+  organizationalEntity = entity
 }
 
 mavenPublishing {
@@ -46,7 +61,7 @@ mavenPublishing {
             classifier = "bin"
             extension = "tar.gz"
           }
-          artifact(file("$buildDir/reports/bom.json")) {
+          artifact(file("$buildDir/reports/cyclonedx-direct/bom.json")) {
             classifier = "sbom"
             extension = "json"
           }
