@@ -16,23 +16,23 @@
 package tech.bison.datalift.core.internal.versioner;
 
 import com.commercetools.api.models.custom_object.CustomObjectDraft;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.vrap.rmf.base.client.error.NotFoundException;
 import tech.bison.datalift.core.api.executor.Context;
 import tech.bison.datalift.core.api.versioner.VersionInfo;
 import tech.bison.datalift.core.api.versioner.Versioner;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * Persists version info in a commercetools custom object.
  */
 public class CustomObjectBasedVersioner implements Versioner {
 
-  private final ObjectMapper objectMapper;
+  private final JsonMapper jsonMapper;
   private static final String VERSION_CONTAINER = "version";
   private static final String VERSION_OBJECT_KEY = "versionKey";
 
-  public CustomObjectBasedVersioner(ObjectMapper objectMapper) {
-    this.objectMapper = objectMapper;
+  public CustomObjectBasedVersioner(JsonMapper jsonMapper) {
+    this.jsonMapper = jsonMapper;
   }
 
   @Override
@@ -42,7 +42,7 @@ public class CustomObjectBasedVersioner implements Versioner {
           .withContainerAndKey(VERSION_CONTAINER, VERSION_OBJECT_KEY).get()
           .executeBlocking()
           .getBody();
-      var version = objectMapper.convertValue(responseBody.getValue(), VersionInfoDto.class);
+      var version = jsonMapper.convertValue(responseBody.getValue(), VersionInfoDto.class);
       return new VersionInfo(version.current(), responseBody.getVersion());
     } catch (NotFoundException ex) {
       return VersionInfo.initialVersion();

@@ -27,7 +27,6 @@ import static org.mockito.Mockito.when;
 import com.commercetools.api.client.ProjectApiRoot;
 import com.commercetools.api.models.custom_object.CustomObject;
 import com.commercetools.api.models.custom_object.CustomObjectDraft;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.vrap.rmf.base.client.error.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,6 +37,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import tech.bison.datalift.core.api.configuration.Configuration;
 import tech.bison.datalift.core.api.executor.Context;
+import tools.jackson.databind.json.JsonMapper;
 
 @ExtendWith(MockitoExtension.class)
 class CustomObjectBasedVersionerTest {
@@ -45,7 +45,7 @@ class CustomObjectBasedVersionerTest {
   @Mock(answer = Answers.RETURNS_DEEP_STUBS)
   private ProjectApiRoot projectApiRoot;
   @Mock
-  private ObjectMapper objectMapper;
+  private JsonMapper jsonMapper;
 
   @Mock
   private Configuration configuration;
@@ -66,7 +66,7 @@ class CustomObjectBasedVersionerTest {
         .executeBlocking()
         .getBody())
         .thenReturn(customObject);
-    when(objectMapper.convertValue(customObject.getValue(), VersionInfoDto.class)).thenReturn(existingVersionDto);
+    when(jsonMapper.convertValue(customObject.getValue(), VersionInfoDto.class)).thenReturn(existingVersionDto);
 
     var versionInfo = createVersioner().currentVersion(createContext());
 
@@ -114,6 +114,6 @@ class CustomObjectBasedVersionerTest {
   }
 
   private CustomObjectBasedVersioner createVersioner() {
-    return new CustomObjectBasedVersioner(objectMapper);
+    return new CustomObjectBasedVersioner(jsonMapper);
   }
 }

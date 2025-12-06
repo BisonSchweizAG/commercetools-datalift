@@ -17,8 +17,6 @@ package tech.bison.datalift.core;
 
 import static java.util.Comparator.comparingInt;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +31,7 @@ import tech.bison.datalift.core.api.versioner.VersionInfo;
 import tech.bison.datalift.core.api.versioner.Versioner;
 import tech.bison.datalift.core.internal.resolver.ClasspathMigrationResolver;
 import tech.bison.datalift.core.internal.versioner.CustomObjectBasedVersioner;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * Entry point for a data migration run.
@@ -58,20 +57,18 @@ public class DataLift {
 
   public DataLift(Configuration configuration) {
     this.configuration = configuration;
-    var objectMapper = new ObjectMapper()
-        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    this.versioner = new CustomObjectBasedVersioner(objectMapper);
+    var jsonMapper = JsonMapper.builder().build();
+    this.versioner = new CustomObjectBasedVersioner(jsonMapper);
     this.migrationResolver = new ClasspathMigrationResolver(configuration.getLocations(), configuration.getClassLoader());
     this.dataLiftExecutor = new DataLiftExecutor(versioner);
   }
 
   /**
-   * This is your starting point. This creates a configuration which can be customized to your needs before being
-   * loaded into a new DataLift instance using the load() method.
-   *
+   * This is your starting point. This creates a configuration which can be customized to your needs before being loaded into a new DataLift instance using the load() method.
+   * <p>
    * In its simplest form, this is how you configure DataLift with all defaults to get started:
    * <pre>DataLift dataLift = DataLift.configure().withApiUrl(..).load();</pre>
-   *
+   * <p>
    * After that you have a fully-configured DataLift instance and you can call migrate()
    *
    * @return A new configuration from which DataLift can be loaded.
@@ -81,16 +78,14 @@ public class DataLift {
   }
 
   /**
-   * This is your starting point. This creates a configuration which can be customized to your needs before being
-   * loaded into a new DataLift instance using the load() method.
-   *
+   * This is your starting point. This creates a configuration which can be customized to your needs before being loaded into a new DataLift instance using the load() method.
+   * <p>
    * In its simplest form, this is how you configure DataLift with all defaults to get started:
    * <pre>DataLift dataLift = DataLift.configure().withApiUrl(..).load();</pre>
-   *
+   * <p>
    * After that you have a fully-configured DataLift instance and you can call migrate()
    *
    * @param classLoader The class loader to use when loading data migration classes.
-   *
    * @return A new configuration from which DataLift can be loaded.
    */
   public static FluentConfiguration configure(ClassLoader classLoader) {
