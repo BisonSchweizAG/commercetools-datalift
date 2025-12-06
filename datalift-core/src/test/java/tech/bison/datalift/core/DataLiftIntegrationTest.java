@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -23,6 +22,7 @@ import tech.bison.datalift.core.api.configuration.FluentConfiguration;
 import tech.bison.datalift.core.api.executor.Context;
 import tech.bison.datalift.core.api.versioner.Versioner;
 import tech.bison.datalift.core.internal.versioner.CustomObjectBasedVersioner;
+import tools.jackson.databind.json.JsonMapper;
 
 @Testcontainers
 class DataLiftIntegrationTest {
@@ -43,7 +43,7 @@ class DataLiftIntegrationTest {
     var mockServerHostAndPort = "http://" + mockServer.getHost() + ":" + mockServer.getServerPort();
     var configuration = new FluentConfiguration().withApiProperties(new CommercetoolsProperties("test", "test", mockServerHostAndPort, mockServerHostAndPort + "/auth", "integrationtest"));
     context = new Context(configuration);
-    versioner = new CustomObjectBasedVersioner(new ObjectMapper());
+    versioner = new CustomObjectBasedVersioner(JsonMapper.builder().build());
 
     mockServerClient = new MockServerClient(mockServer.getHost(), mockServer.getServerPort());
     mockServerClient

@@ -3,7 +3,7 @@ junit-jupiter = '6.0.1'
 mockito = '5.20.0'
 assertj = '3.27.6'
 commercetools = '19.6.2'
-jackson = '2.20.1'
+jackson = '3.0.3'
 testcontainers = '1.21.3'
 picocli = '4.7.7'
 mockserver = '5.15.0'
@@ -19,7 +19,7 @@ guava = '33.5.0-jre'
 commercetools-java-importapi = { module = "com.commercetools.sdk:commercetools-sdk-java-importapi", version.ref = "commercetools" }
 commercetools-java-api = { module = "com.commercetools.sdk:commercetools-sdk-java-api", version.ref = "commercetools" }
 commercetools-okhttp-client4 = { module = "com.commercetools.sdk:commercetools-okhttp-client4", version.ref = "commercetools" }
-jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "jackson" }
+jackson-databind = { module = "tools.jackson.core:jackson-databind", version.ref = "jackson" }
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit-jupiter" }
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit-jupiter" }
 junit-platform-launcher = { module = 'org.junit.platform:junit-platform-launcher' }
