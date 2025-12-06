@@ -8,9 +8,6 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.tomakehurst.wiremock.http.HttpHeader;
-import com.github.tomakehurst.wiremock.http.HttpHeaders;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +16,7 @@ import tech.bison.datalift.core.api.configuration.FluentConfiguration;
 import tech.bison.datalift.core.api.executor.Context;
 import tech.bison.datalift.core.api.versioner.Versioner;
 import tech.bison.datalift.core.internal.versioner.CustomObjectBasedVersioner;
+import tools.jackson.databind.json.JsonMapper;
 
 @WireMockTest(httpPort = 8087)
 class DataLiftIntegrationTest {
@@ -32,7 +30,7 @@ class DataLiftIntegrationTest {
     stubFor(post(urlEqualTo("/auth"))
         .willReturn(aResponse().withBodyFile("token.json")));
     context = new Context(configuration);
-    versioner = new CustomObjectBasedVersioner(new ObjectMapper());
+    versioner = new CustomObjectBasedVersioner(JsonMapper.builder().build());
   }
 
   @Test
@@ -49,7 +47,7 @@ class DataLiftIntegrationTest {
   @Test
   void currentVersionOneReturnsVersion() {
     stubFor(get(urlPathEqualTo("/integrationtest/custom-objects/version/versionKey"))
-        .willReturn(aResponse().withStatus(200).withHeaders(new HttpHeaders().plus(HttpHeader.)).withty.withBodyFile("get-custom-object.json")));
+        .willReturn(aResponse().withHeader("Content-Type", "application/json").withBodyFile("get-custom-object.json")));
 
     var versionInfo = versioner.currentVersion(context);
 
