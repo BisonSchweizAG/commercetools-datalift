@@ -1,4 +1,5 @@
-import org.cyclonedx.model.*;
+import org.cyclonedx.model.OrganizationalContact
+import org.cyclonedx.model.OrganizationalEntity;
 
 plugins {
   alias(libs.plugins.vanniktech.maven.publish)
@@ -52,19 +53,19 @@ mavenPublishing {
       developerConnection = "scm:git:ssh://git@github.com/BisonSchweizAG/commercetools-datalift.git"
     }
   }
+}
 
-  afterEvaluate {
-    publishing {
-      publications {
-        maven(MavenPublication) {
-          artifact(tasks.distTar) {
-            classifier = "bin"
-            extension = "tar.gz"
-          }
-          artifact(file("$buildDir/reports/cyclonedx-direct/bom.json")) {
-            classifier = "sbom"
-            extension = "json"
-          }
+afterEvaluate {
+  publishing {
+    publications {
+      maven(MavenPublication) {
+        artifact(tasks.distTar) {
+          classifier = "bin"
+          extension = "tar.gz"
+        }
+        artifact(file("$buildDir/reports/cyclonedx-direct/bom.json")) {
+          classifier = "sbom"
+          extension = "json"
         }
       }
     }
