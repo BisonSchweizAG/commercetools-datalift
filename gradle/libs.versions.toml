@@ -11,7 +11,7 @@ vanniktech-maven-publish = '0.36.0'
 cyclonedx-bom = '3.1.0'
 wiremock = '3.13.2'
 
-reckon = '1.0.1'
+reckon = '2.0.0'
 guava = '33.5.0-jre'
 
 [libraries]
