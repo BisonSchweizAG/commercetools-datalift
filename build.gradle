@@ -16,7 +16,7 @@ subprojects {
   apply plugin: 'java-library'
   apply plugin: 'jacoco'
   java {
-    sourceCompatibility = '21'
+    sourceCompatibility = '25'
     withSourcesJar()
   }
 
