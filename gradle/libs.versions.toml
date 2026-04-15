@@ -2,7 +2,7 @@
 junit-jupiter = '6.0.3'
 mockito = '5.23.0'
 assertj = '3.27.7'
-commercetools = '19.9.0'
+commercetools = '19.9.1'
 jackson = '3.1.2'
 picocli = '4.7.7'
 slf4j = '2.0.17'
@@ -12,7 +12,7 @@ cyclonedx-bom = '3.2.4'
 wiremock = '3.13.2'
 
 reckon = '2.0.0'
-guava = '33.5.0-jre'
+guava = '33.6.0-jre'
 
 [libraries]
 commercetools-java-importapi = { module = "com.commercetools.sdk:commercetools-sdk-java-importapi", version.ref = "commercetools" }
