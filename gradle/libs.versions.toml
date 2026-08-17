@@ -12,7 +12,7 @@ cyclonedx-bom = '3.4.1'
 wiremock = '3.13.2'
 
 reckon = '2.0.0'
-guava = '33.6.0-jre'
+guava = '33.7.0-jre'
 
 [libraries]
 commercetools-java-importapi = { module = "com.commercetools.sdk:commercetools-sdk-java-importapi", version.ref = "commercetools" }
